@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+.env
+.DS_Store
+
+# Large intermediates — never commit full scenes
+*.h5
+*.hdf5
+*.SAFE/
+data/raw/
+data/cache/
+*.tif
+!data/sample_input/*.tif
