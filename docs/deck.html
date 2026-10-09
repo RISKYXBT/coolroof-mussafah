@@ -381,10 +381,10 @@
   <div class="body">
     <div class="figwrap"><img src="fig/f1_sensitivity.png"></div>
     <div class="stats" style="margin-top:6px;">
-      <div class="stat"><div class="v">−4.56 °C</div><div class="k">per unit of albedo, 95% CI [−5.96, −3.00]</div></div>
+      <div class="stat"><div class="v">−4.56 °C</div><div class="k">per unit of albedo, 95% CI [−6.05, −2.94]</div></div>
       <div class="stat"><div class="v">0.46 °C</div><div class="k">cooling per +0.10 albedo [0.30, 0.60]</div></div>
       <div class="stat"><div class="v">152,487</div><div class="k">pixels in 159 spatial blocks</div></div>
-      <div class="stat"><div class="v">0.050</div><div class="k">spatial-CV R² — and we report it plainly</div></div>
+      <div class="stat"><div class="v">0.057</div><div class="k">spatial-CV R² — and we report it plainly</div></div>
     </div>
   </div>
   <div class="foot"><span>5-fold spatial block CV, 1 km blocks · 300 block bootstrap resamples</span><span>7</span></div>
@@ -488,7 +488,7 @@
           evidence.</strong></p>
         </div>
         <div class="card">
-          <div class="tag">On the low R² (0.050)</div>
+          <div class="tag">On the low R² (0.057)</div>
           <p>We estimate a <strong>marginal effect, not a prediction</strong>. Absolute surface
           temperature is driven mostly by factors we do not model — thermal mass, moisture,
           building use, HVAC exhaust. The coefficient on albedo is nonetheless tightly
@@ -501,7 +501,52 @@
   <div class="foot"><span>Top features: swir 0.132 · mndwi 0.116 · tex_bright_5 0.108 — texture is a quarter of the model's decision weight</span><span>11</span></div>
 </section>
 
-<!-- ============================================================ 12 LIMITATIONS -->
+<!-- ============================================================ 12 ROOF CONFOUND -->
+<section class="slide">
+  <div class="eyebrow">Validation · the check that did not pass</div>
+  <h2>The roof cross-section does not confirm the per-roof predictions</h2>
+  <p class="sub">
+    We ranked the roofs, then tested the ranking against itself: across the 3,603 buildings,
+    is a brighter roof a cooler roof? <strong>No</strong> — the raw association is
+    <strong>+8.1 °C per unit albedo</strong> (p ≈ 10⁻⁹⁰) and survives controlling for roof
+    size (+6.2). We report it because a reviewer who opens our own CSV will find it.
+  </p>
+  <div class="body">
+    <div class="figwrap" style="flex:1; min-height:0;"><img src="fig/f7_roof_confound.png"></div>
+    <div class="cards steps" style="margin-top:14px;">
+      <div class="card">
+        <div class="tag">Part of it is the thermal pixel</div>
+        <p>Landsat thermal is 30 m; the median roof here is <strong>796 m², under one
+        pixel</strong>, so its "roof temperature" is largely its surroundings. Strongest
+        for sub-pixel roofs (+9.7), falling to <strong>+3.4, not significant</strong>, for
+        the 93 roofs spanning ~5 clean pixels.</p>
+      </div>
+      <div class="card">
+        <div class="tag">The rest is a between-building confound</div>
+        <p>Brighter-roofed buildings here are <strong>different buildings</strong>: larger,
+        newer, in wider paved yards, with different internal heat loads and roof thermal
+        mass. None of that is in our data, and looking across buildings does not remove
+        it.</p>
+      </div>
+      <div class="card accent">
+        <div class="tag">Why this does not refute −4.56</div>
+        <p>Two different questions. <strong>"Do brighter surfaces run cooler, location and
+        vegetation fixed?"</strong> — yes, −4.56 within spatial blocks. <strong>"Are
+        buildings with brighter roofs cooler buildings?"</strong> — no, which is a fact
+        about which buildings have bright roofs, not about radiation.</p>
+      </div>
+      <div class="card warn">
+        <div class="tag">What it costs us — stated plainly</div>
+        <p>The per-roof ΔT column is a <strong>screening estimate carried down from a
+        pixel-level marginal effect, not validated at roof scale.</strong> Settling it
+        needs a before/after on coated roofs — step 1 of the next phase.</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Computed from results/roof_priority_ranked.csv — the file we ship</span><span>12</span></div>
+</section>
+
+<!-- ============================================================ 13 LIMITATIONS -->
 <section class="slide">
   <div class="eyebrow">Limitations · reported, not buried</div>
   <h2>What this does not do</h2>
@@ -527,6 +572,7 @@
       </div>
     </div>
     <ul class="two">
+      <li class="bad"><strong>The per-roof ΔT is not validated at roof scale</strong> — see the previous slide. It is a screening estimate, not an engineering prediction.</li>
       <li class="bad">Land surface temperature is <strong>not air temperature</strong>. This ranks surfaces; it does not predict heat-stroke risk.</li>
       <li class="bad">The sensitivity is <strong>correlational</strong>. Roof thermal mass, building use and HVAC exhaust are not separated.</li>
       <li class="bad">Validation is against <strong>ESA WorldCover, itself a model</strong>. No field survey was performed.</li>
@@ -537,10 +583,10 @@
       <li class="bad">OSM footprint completeness varies. A deployed version would use <strong>municipal cadastral data</strong>.</li>
     </ul>
   </div>
-  <div class="foot"><span>Full list in README §9.6 — thirteen limitations, each stated before a reviewer has to find it</span><span>12</span></div>
+  <div class="foot"><span>Full list in README §9.6 — each stated before a reviewer has to find it</span><span>13</span></div>
 </section>
 
-<!-- ============================================================ 13 NEXT -->
+<!-- ============================================================ 14 NEXT -->
 <section class="slide">
   <div class="eyebrow">Impact and next steps</div>
   <h2>What exists today, and what the next phase needs</h2>
@@ -553,10 +599,11 @@
     </div>
     <div class="cards" style="margin-top:6px;">
       <div class="card accent">
-        <div class="tag">1 · Ground truth</div>
-        <p>A rooftop sampling campaign on 20–30 roofs across the five spectral classes. Turns
-        "consistent with bitumen" into a <strong>verified material call</strong>, and gives the
-        first in-situ albedo measurements to check the synthesised values against.</p>
+        <div class="tag">1 · Ground truth and a coated-roof trial</div>
+        <p>A rooftop campaign on 20–30 roofs across the five spectral classes: verifies the
+        material call, gives in-situ albedo, and — by coating a subset and re-imaging —
+        <strong>measures ΔT at roof scale directly</strong>, which is the one claim our
+        own data cannot confirm.</p>
       </div>
       <div class="card accent">
         <div class="tag">2 · Cadastral footprints</div>
@@ -581,10 +628,10 @@
       reproduce every number on these slides</em> — two notebooks, free data, no credentials.
     </div>
   </div>
-  <div class="foot"><span>github.com/RISKYXBT/coolroof-mussafah · MIT licence</span><span>13</span></div>
+  <div class="foot"><span>github.com/RISKYXBT/coolroof-mussafah · MIT licence</span><span>14</span></div>
 </section>
 
-<!-- ============================================================ 14 TEAM -->
+<!-- ============================================================ 15 TEAM -->
 <section class="slide">
   <div class="eyebrow">Team, licence and attribution</div>
   <h2>Team T0050</h2>
@@ -625,7 +672,7 @@
       </div>
     </div>
   </div>
-  <div class="foot"><span>Arab Youth Space Hackathon 2026 · 813 Challenge · Hyperspectral Data Track</span><span>14</span></div>
+  <div class="foot"><span>Arab Youth Space Hackathon 2026 · 813 Challenge · Hyperspectral Data Track</span><span>15</span></div>
 </section>
 
 </body>

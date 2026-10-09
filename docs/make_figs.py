@@ -51,9 +51,9 @@ def f1_sensitivity():
     fig, ax = plt.subplots(figsize=(11, 4.6))
 
     rows = [
-        ("Random forest + WorldCover\n(adopted)", -4.56, -5.96, -3.00, NAVY, True),
-        ("Calibrated NDBI + WorldCover", -4.55, None, None, GREY, False),
-        ("WorldCover mask only", -4.07, None, None, GREY, False),
+        ("Random forest + WorldCover\n(adopted)", -4.56, -6.05, -2.94, NAVY, True),
+        ("Calibrated NDBI + WorldCover*", -4.55, None, None, GREY, False),
+        ("WorldCover mask only*", -4.07, None, None, GREY, False),
         ("NDBI > 0 alone  —  rejected", +11.55, None, None, RED, False),
     ]
     ys = np.arange(len(rows))[::-1]
@@ -77,6 +77,9 @@ def f1_sensitivity():
     ax.set_xlim(-8.2, 14.2)
     ax.set_ylim(-0.75, len(rows) - 0.25)
     ax.set_xlabel("Slope  (°C per unit of surface albedo)", fontsize=14)
+    ax.text(0.0, -0.285, "* development runs under alternative masks; the committed "
+            "notebook reproduces the adopted model and the rejected baseline",
+            transform=ax.transAxes, fontsize=10, color="#8a949d")
     ax.spines[["top", "right", "left"]].set_visible(False)
     ax.tick_params(axis="y", length=0)
     ax.grid(axis="x", alpha=0.22, lw=0.8)
@@ -87,7 +90,7 @@ def f1_sensitivity():
                 ha="center", linespacing=1.4,
                 arrowprops=dict(arrowstyle="->", color=RED, lw=1.4,
                                 connectionstyle="arc3,rad=-0.22"))
-    ax.text(-2.45, 3.0, "95% CI  [−5.96, −3.00]\n300 spatial block bootstraps",
+    ax.text(-2.30, 3.0, "95% CI  [−6.05, −2.94]\n300 spatial block bootstraps",
             fontsize=11.5, color="#4a5a6a", ha="left", va="center",
             linespacing=1.4)
     finish(fig, "f1_sensitivity")
@@ -283,3 +286,54 @@ if __name__ == "__main__":
     f5_warming()
     f6_pipeline()
     print("done")
+
+
+# ---------------------------------------------------------------------------
+# F7 · the roof-level cross-section does not confirm the pixel-level effect
+# ---------------------------------------------------------------------------
+def f7_roof_confound():
+    import pandas as pd, scipy.stats as sps
+    r = pd.read_csv("/home/claude/mainres/roof_priority_ranked.csv")
+    r["q"] = pd.qcut(r.area_m2, 5, labels=False)
+    xs, ys, ps, ns, med = [], [], [], [], []
+    for q in range(5):
+        s = r[r.q == q]
+        lr = sps.linregress(s.albedo, s.lst_c)
+        xs.append(q); ys.append(lr.slope); ps.append(lr.pvalue)
+        ns.append(len(s)); med.append(s.area_m2.median())
+    big = r[r.area_m2 >= 5000]
+    lrb = sps.linregress(big.albedo, big.lst_c)
+
+    fig, ax = plt.subplots(figsize=(10.4, 4.5))
+    cols = [RED if p < 0.01 else AMBER if p < 0.05 else GREY for p in ps]
+    ax.bar(xs, ys, width=.52, color=cols, zorder=3)
+    for x, y, p, n in zip(xs, ys, ps, ns):
+        ax.text(x, y + .28, f"{y:+.1f}", ha="center", fontsize=14,
+                fontweight="bold", color=RED if p < .01 else AMBER if p < .05 else GREY)
+        ax.text(x, -0.75, f"n={n}", ha="center", fontsize=9.5, color="#7a8690")
+
+    ax.bar([5.1], [lrb.slope], width=.52, color=GREY, zorder=3)
+    ax.text(5.1, lrb.slope + .28, f"{lrb.slope:+.1f}", ha="center", fontsize=14,
+            fontweight="bold", color=GREY)
+    ax.text(5.1, -0.75, f"n={len(big)}", ha="center", fontsize=9.5, color="#7a8690")
+    ax.text(5.1, lrb.slope + 1.25, f"p = {lrb.pvalue:.2f}\nnot significant",
+            ha="center", fontsize=10.5, color="#4a5a6a", linespacing=1.4)
+
+    ax.axhline(0, color="#aab4bd", lw=1.2)
+    ax.axhline(-4.56, color=NAVY, lw=2, ls="--", zorder=2)
+    ax.text(-0.42, -4.56, " pixel-level marginal effect  −4.56", va="bottom",
+            fontsize=11, color=NAVY, fontweight=600)
+
+    ax.set_xticks(xs + [5.1])
+    ax.set_xticklabels([f"Q{q+1}\n{m:,.0f} m²\n{m/900:.1f} px" for q, m in zip(xs, med)]
+                       + ["≥5,000 m²\n~5.5 px\n(cleanest)"], fontsize=10)
+    ax.set_ylabel("Roof-level slope\n(°C per unit albedo)", fontsize=12)
+    ax.set_ylim(-6.2, 12.4)
+    ax.spines[["top", "right", "bottom"]].set_visible(False)
+    ax.tick_params(axis="x", length=0, pad=16)
+    ax.grid(axis="y", alpha=0.22, lw=0.8)
+    ax.set_title("Between buildings, brighter roofs are not cooler. The association is "
+                 "strongest where\nthe thermal pixel is dirtiest — but it does not vanish "
+                 "when the pixel is clean.",
+                 fontsize=13.5, pad=12, loc="left")
+    finish(fig, "f7_roof_confound", pad=0.3)

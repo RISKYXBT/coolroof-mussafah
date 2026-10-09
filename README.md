@@ -215,7 +215,7 @@ benefit = ΔT × roof_area_m²                                   [°C·m²]
 ```
 
 Area enters deliberately: one large warehouse roof is far cheaper to treat per square
-metre than fifty small ones. Three ranking modes are produced (§9.4).
+metre than fifty small ones. Three ranking modes are produced (§9.5).
 
 **Validation is spatial throughout, never random pixel splits** — neighbouring pixels
 are near-duplicates and a random split leaks them across the train/test boundary.
@@ -290,8 +290,8 @@ they are openly retrievable with the recorded parameters.
 | Desert converted to built-up | **30.4 km² (3,045 ha)** |
 | Static surface UHI (built-up vs desert, today) | **+1.33 °C** (t = 78.6, p < 10⁻³⁰⁰) |
 | Existing built fabric warming vs desert | **+0.34 °C/decade** (t = 62.7, d = 0.32) |
-| **Measured albedo sensitivity** | **−4.56 °C per unit albedo**, 95% CI **[−5.96, −3.00]** |
-| → cooling per +0.10 albedo | **0.46 °C** [0.30, 0.60] |
+| **Measured albedo sensitivity** | **−4.56 °C per unit albedo**, 95% CI **[−6.05, −2.94]** |
+| → cooling per +0.10 albedo | **0.46 °C** [0.29, 0.61] |
 | Roofs ranked | 3,603 (4.82 km² of roof) |
 | Top 100 roofs | 20.8% of total benefit — **7.5× concentration** |
 | Avoided solar absorption, top 100 | **64.8 MW** summer-mean, 205 MW at noon peak |
@@ -321,8 +321,8 @@ the spectral index alone failed.
 | | |
 |---|---|
 | slope | −4.56 °C per unit albedo |
-| 95% CI (300 block bootstrap resamples) | **[−5.96, −3.00]** |
-| spatial-CV R² | 0.050 |
+| 95% CI (300 block bootstrap resamples) | **[−6.05, −2.94]** |
+| spatial-CV R² | 0.057 |
 | spatial-CV RMSE | 1.47 °C |
 | n | 152,487 px in 159 blocks |
 
@@ -341,6 +341,10 @@ different built-up classifications:
 | WorldCover mask + water/vegetation exclusion | −4.07 |
 | Calibrated NDBI threshold + WorldCover | −4.55 |
 | Random forest + WorldCover | **−4.56** |
+
+The first two were development runs under alternative masks. The committed notebook
+reproduces the adopted model (−4.56) and the rejected baseline (+11.55); `summary.json`
+records both.
 
 **A sign error we caught and fixed.** Our first mask (`NDBI > 0` alone) gave a slope of
 **+11.55** — brighter surfaces appearing hotter, inverting the physics. The cause was
@@ -371,7 +375,57 @@ Distinguishing them needs construction-timing records or a matched-control desig
 pairing converted parcels with equidistant unconverted ones. Out of scope here, and the
 natural next step.
 
-### 9.4 Three ranking modes — a policy choice, not a technical one
+### 9.4 The roof cross-section does not confirm the per-roof predictions
+
+We ranked the roofs, then tested the ranking against itself. Across the 3,603 buildings,
+**a brighter roof is not a cooler roof**: the cross-sectional association is
+**+8.11 °C per unit albedo** (p ≈ 10⁻⁹⁰, r² = 0.107), and it survives controlling for
+roof size (+6.20). That is the opposite sign to the −4.56 the product is built on, and it
+is visible in panel 3 of `results/05_roof_priority.png` — a file we ship. Reporting it is
+not optional.
+
+**Part of it is the thermal pixel.** Landsat thermal is 30 m, so one pixel is 900 m². The
+median roof in the ranking is 796 m² — under one pixel — and its "roof temperature" is
+therefore largely its surroundings. Splitting by roof size:
+
+| Roof size | median area | ≈ Landsat px | slope | p |
+|---|---|---|---|---|
+| Q1 | 438 m² | 0.5 | **+9.69** | 10⁻²⁷ |
+| Q2 | 573 m² | 0.6 | +5.62 | 10⁻¹⁰ |
+| Q3 | 796 m² | 0.9 | +1.59 | 0.035 |
+| Q4 | 1,185 m² | 1.3 | +4.17 | 10⁻⁶ |
+| Q5 | 2,399 m² | 2.7 | +5.05 | 10⁻⁶ |
+| ≥ 5,000 m² (n = 93) | — | ~5.5 | +3.45 | **0.24, not significant** |
+
+The association is strongest where the pixel is dirtiest and is not significant for the
+93 roofs that span a clean pixel — but it does not flip negative, so mixing is not the
+whole story.
+
+**The rest is a between-building confound.** Brighter-roofed buildings in Mussafah are
+systematically different buildings: larger, newer, set in wider paved yards, with
+different roof thermal mass and internal heat loads. None of those are in our data, and
+none of them are removed by comparing across buildings.
+
+**Why this does not refute −4.56.** The two numbers answer different questions. The
+pixel-level model asks *does a brighter surface run cooler, holding location and
+vegetation roughly fixed* — a within-block marginal effect, and the answer is yes. The
+roof cross-section asks *are buildings that happen to have brighter roofs cooler
+buildings* — a between-unit comparison, and the answer is no. The second is a fact about
+which buildings in Mussafah have bright roofs; it is not a statement about radiative
+physics, and it is exactly the kind of comparison the spatial-block design was chosen to
+avoid.
+
+**What it costs us, stated plainly.** The per-roof `delta_T_est_c` column is a screening
+estimate carried down from a pixel-level marginal effect. **It is not validated at
+individual-roof scale, and our own data does not confirm it.** Settling it requires a
+before/after measurement on coated roofs, or a matched-pair design holding building type,
+size and surroundings fixed. That is step 1 of the proposed next phase, and until it is
+done the ΔT column should be read as a prioritisation score, not as a predicted
+temperature drop for a named building.
+
+---
+
+### 9.5 Three ranking modes — a policy choice, not a technical one
 
 | Mode | Top-100 area | Mean albedo | Mean LST | Avoided absorption |
 |---|---|---|---|---|
@@ -383,7 +437,7 @@ Only **27 of 100 roofs** appear on both the "total benefit" and "hottest" lists.
 choice of objective genuinely changes which buildings get treated, so it belongs to the
 municipality. All three ship in the CSV.
 
-### 9.5 What hyperspectral adds, and what it does not
+### 9.6 What hyperspectral adds, and what it does not
 
 EMIT granule `EMIT_L2A_RFL_001_20260520T110418_2614007_042`, 2026-05-20 at 15:03 local
 — **three hours later in the day than Landsat's ~10:30 overpass**, so it samples closer
@@ -422,8 +476,11 @@ hyperspectral meaningfully differentiates roughly **one third** of the scene, no
 it. We consider this worth reporting for its own sake: any operational hyperspectral
 urban product over Gulf cities, including Satellite 813, will face the same constraint.
 
-### 9.6 Limitations
+### 9.7 Limitations
 
+- **The per-roof ΔT is not validated at roof scale.** See §9.4 — the roof cross-section
+  shows the opposite sign, for reasons we can partly but not fully attribute to mixed
+  thermal pixels. Treat the ΔT column as a prioritisation score.
 - **Land surface temperature is not air temperature.** Satellites measure the radiating
   skin of the surface. Human thermal comfort depends on air temperature, humidity and
   radiant load. This tool ranks *surfaces*; it does not predict heat-stroke risk.
