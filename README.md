@@ -517,7 +517,7 @@ urban product over Gulf cities, including Satellite 813, will face the same cons
 - **Validation is against a model, not ground truth.** ESA WorldCover is itself a
   classification product. No field survey or in-situ logging was performed.
 - **The classifier still over-predicts built-up** (52.4% vs 41.3% reference). Precision
-  0.675 means roughly a third of pixels we call built-up are not; the land-cover areas in
+  0.673 means roughly a third of pixels we call built-up are not; the land-cover areas in
   §9.1 carry that bias.
 - **The 2021-trained classifier is applied to 2014–2016 imagery**, assuming spectral
   stationarity for the same sensor. Reasonable, unverified.
