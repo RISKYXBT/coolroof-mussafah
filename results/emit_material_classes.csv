@@ -1,0 +1,6 @@
+material_class,pixel_share_pct,mean_albedo,albedo_sd,dT_if_coated_c,z_fe_oxide_900,z_bitumen_1730,z_alOH_2200,z_carbonate_2340,enriched_in,depleted_in,interpretation
+3,12.5,0.25,0.026,1.6,-1.85,0.23,-0.88,0.1,—,"fe-1.9σ, alOH-0.9σ",spectrally average / dust-coated
+2,13.9,0.27,0.082,1.51,0.46,1.16,1.36,-0.7,"alOH+1.4σ, bitumen+1.2σ",carbonate-0.7σ,CEMENT / CLAY-BEARING
+1,24.7,0.271,0.036,1.5,-0.01,0.44,-0.59,0.03,—,alOH-0.6σ,spectrally average / dust-coated
+4,30.1,0.284,0.038,1.44,0.38,-0.67,-0.11,-0.56,—,"bitumen-0.7σ, carbonate-0.6σ",spectrally average / dust-coated
+0,18.9,0.324,0.044,1.26,0.28,-0.51,0.52,1.29,"carbonate+1.3σ, alOH+0.5σ",bitumen-0.5σ,CARBONATE

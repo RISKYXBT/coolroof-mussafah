@@ -1,0 +1,140 @@
+{
+  "source": "NASA EMIT L2A surface reflectance (EMITL2ARFL)",
+  "aoi": "Mussafah, Abu Dhabi",
+  "real_aoi": true,
+  "bands_retained": 230,
+  "wavelength_range_nm": [
+    425,
+    2455
+  ],
+  "bands_removed": "atmospheric water 1340-1480 and 1790-1980 nm, SWIR edge >2460 nm, blue edge <420 nm \u2014 EMIT's good_wavelengths flag retains these and reflectance there is noise, not surface signal",
+  "method": "band depths against a local two-point continuum (Clark & Roush 1984); k-means on depths standardised to the scene mean; classes interpreted by DEVIATION from the scene mean, because absolute carbonate depth dominates everywhere in a carbonate-sabkha setting",
+  "features": {
+    "fe_oxide_900": {
+      "centre_nm": 900,
+      "diagnostic_of": "Fe-oxide \u2014 rust, red tile",
+      "scene_mean_depth": 0.0215,
+      "scene_sd": 0.0071,
+      "corr_with_albedo": 0.149
+    },
+    "bitumen_1730": {
+      "centre_nm": 1730,
+      "diagnostic_of": "C-H stretch \u2014 BITUMEN / ASPHALT",
+      "scene_mean_depth": 0.0126,
+      "scene_sd": 0.0105,
+      "corr_with_albedo": -0.21
+    },
+    "alOH_2200": {
+      "centre_nm": 2200,
+      "diagnostic_of": "Al-OH \u2014 clay, cement, concrete",
+      "scene_mean_depth": -0.0095,
+      "scene_sd": 0.0152,
+      "corr_with_albedo": 0.282
+    },
+    "carbonate_2340": {
+      "centre_nm": 2340,
+      "diagnostic_of": "carbonate \u2014 limestone, sabkha sand",
+      "scene_mean_depth": 0.1062,
+      "scene_sd": 0.0236,
+      "corr_with_albedo": 0.272
+    }
+  },
+  "ari_vs_brightness_clustering": 0.092,
+  "headline": {
+    "class": 2,
+    "pixel_share_pct": 13.9,
+    "mean_albedo": 0.27,
+    "albedo_sd": 0.082,
+    "z_bitumen_1730": 1.16,
+    "z_alOH_2200": 1.36,
+    "statement": "Class 2 covers 13.9% of the imaged scene at mean albedo 0.270 \u2014 the second-darkest of the 5 classes \u2014 and is enriched +1.16 sigma in the 1730 nm C-H (bitumen) feature and +1.36 sigma in 2200 nm Al-OH (cement), with the widest albedo spread of any class (sd 0.082 against 0.026-0.044 elsewhere), consistent with mixed built materials rather than uniform sand. Broadband albedo identifies these surfaces as dark; only the narrow bands identify them as bituminous and cement-bearing, which is what determines whether a roof can be coated or must be replaced.",
+    "albedo_rank": 2,
+    "albedo_rank_label": "second-darkest",
+    "widest_albedo_spread": true
+  },
+  "classes": [
+    {
+      "material_class": 3,
+      "pixel_share_pct": 12.5,
+      "mean_albedo": 0.25,
+      "albedo_sd": 0.026,
+      "dT_if_coated_c": 1.6,
+      "z_fe_oxide_900": -1.85,
+      "z_bitumen_1730": 0.23,
+      "z_alOH_2200": -0.88,
+      "z_carbonate_2340": 0.1,
+      "enriched_in": "\u2014",
+      "depleted_in": "fe-1.9\u03c3, alOH-0.9\u03c3",
+      "interpretation": "spectrally average / dust-coated"
+    },
+    {
+      "material_class": 2,
+      "pixel_share_pct": 13.9,
+      "mean_albedo": 0.27,
+      "albedo_sd": 0.082,
+      "dT_if_coated_c": 1.51,
+      "z_fe_oxide_900": 0.46,
+      "z_bitumen_1730": 1.16,
+      "z_alOH_2200": 1.36,
+      "z_carbonate_2340": -0.7,
+      "enriched_in": "alOH+1.4\u03c3, bitumen+1.2\u03c3",
+      "depleted_in": "carbonate-0.7\u03c3",
+      "interpretation": "CEMENT / CLAY-BEARING"
+    },
+    {
+      "material_class": 1,
+      "pixel_share_pct": 24.7,
+      "mean_albedo": 0.271,
+      "albedo_sd": 0.036,
+      "dT_if_coated_c": 1.5,
+      "z_fe_oxide_900": -0.01,
+      "z_bitumen_1730": 0.44,
+      "z_alOH_2200": -0.59,
+      "z_carbonate_2340": 0.03,
+      "enriched_in": "\u2014",
+      "depleted_in": "alOH-0.6\u03c3",
+      "interpretation": "spectrally average / dust-coated"
+    },
+    {
+      "material_class": 4,
+      "pixel_share_pct": 30.1,
+      "mean_albedo": 0.284,
+      "albedo_sd": 0.038,
+      "dT_if_coated_c": 1.44,
+      "z_fe_oxide_900": 0.38,
+      "z_bitumen_1730": -0.67,
+      "z_alOH_2200": -0.11,
+      "z_carbonate_2340": -0.56,
+      "enriched_in": "\u2014",
+      "depleted_in": "bitumen-0.7\u03c3, carbonate-0.6\u03c3",
+      "interpretation": "spectrally average / dust-coated"
+    },
+    {
+      "material_class": 0,
+      "pixel_share_pct": 18.9,
+      "mean_albedo": 0.324,
+      "albedo_sd": 0.044,
+      "dT_if_coated_c": 1.26,
+      "z_fe_oxide_900": 0.28,
+      "z_bitumen_1730": -0.51,
+      "z_alOH_2200": 0.52,
+      "z_carbonate_2340": 1.29,
+      "enriched_in": "carbonate+1.3\u03c3, alOH+0.5\u03c3",
+      "depleted_in": "bitumen-0.5\u03c3",
+      "interpretation": "CARBONATE"
+    }
+  ],
+  "caveats": [
+    "Spectral inference only. No field verification: classes are 'consistent with' a material, never confirmed as one.",
+    "EMIT is 60 m, one pixel 3,600 m2. Reliable only for roofs spanning a clean pixel; the top-100 ranked roofs average 1.07 ha (~3 px), smaller roofs are spectrally mixed.",
+    "This granule covers the NORTHERN part of the AOI only (granule south edge 24.353 N vs AOI south 24.29 N) with 43.5% GLT fill \u2014 roughly 46 km2 of the 195 km2 AOI.",
+    "Both the 2200 nm Al-OH and the 1730 nm C-H depth maps show faint diagonal detector striping, and mean Al-OH depth is slightly negative scene-wide, so part of that signal is instrumental rather than surface. The class-mean z-scores average over thousands of pixels and are robust to it; a per-pixel material call on a single roof is not, and should not be made from this product alone.",
+    "Carbonate absorption dominates the scene absolutely (mean depth 0.106); the classification therefore keys on deviations from that background, not on it."
+  ],
+  "licence": "NASA EMIT data are open and free (LP DAAC).",
+  "spectrally_average_share_pct": 67.3,
+  "corrections_applied": [
+    "Class 2 was initially described as 'the darkest' class; it is the second-darkest (albedo 0.270 against class 3 at 0.250). Corrected here and computed from the data in notebooks/04_emit_hyperspectral.ipynb so it cannot drift again.",
+    "The 1730 nm C-H depth map was initially reported as free of detector striping. It shows faint striping, as the 2200 nm map does. Corrected in the caveats above."
+  ]
+}

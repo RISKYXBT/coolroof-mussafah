@@ -1,6 +1,7 @@
 # Arab Youth Space Hackathon 2026 — 813 Challenge
 # Cool Roof Priority Index. Pinned versions, Python 3.11.
 
+# --- 02_main_analysis.ipynb: Landsat + Sentinel-2 via Planetary Computer -----
 pystac-client==0.8.6
 planetary-computer==1.0.0
 stackstac==0.5.1
@@ -11,9 +12,15 @@ geopandas==1.0.1
 shapely==2.0.6
 rasterstats==0.20.0
 scikit-learn==1.5.2
+scipy==1.14.1
 matplotlib==3.9.2
 pandas==2.2.3
 numpy==1.26.4
 requests==2.32.4
+
+# --- 04_emit_hyperspectral.ipynb: NASA EMIT via Earthdata -------------------
+earthaccess==0.11.0
 h5py==3.11.0
+netCDF4==1.7.1
+
 jupyter==1.1.1

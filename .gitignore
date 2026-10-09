@@ -1,0 +1,24 @@
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+.env
+.DS_Store
+
+# Large intermediates — never commit full scenes.
+# The EMIT granule alone is ~3.5 GB; it is re-downloaded from the pinned
+# granule ID in notebooks/04_emit_hyperspectral.ipynb.
+*.nc
+*.h5
+*.hdf5
+*.zarr/
+*.SAFE/
+data/raw/
+data/cache/
+data/sample_input/*.nc
+
+# Rasters are ignored by default, EXCEPT the small committed outputs.
+*.tif
+!data/sample_input/*.tif
+!results/*.tif
