@@ -48,13 +48,11 @@ def finish(fig, name, pad=0.25):
 # F1 · the headline: albedo sensitivity, three methods + the error we caught
 # ---------------------------------------------------------------------------
 def f1_sensitivity():
-    fig, ax = plt.subplots(figsize=(11, 4.6))
+    fig, ax = plt.subplots(figsize=(11, 3.5))
 
     rows = [
-        ("Random forest + WorldCover\n(adopted)", -4.56, -6.05, -2.94, NAVY, True),
-        ("Calibrated NDBI + WorldCover*", -4.55, None, None, GREY, False),
-        ("WorldCover mask only*", -4.07, None, None, GREY, False),
-        ("NDBI > 0 alone  —  rejected", +11.55, None, None, RED, False),
+        ("Random forest + WorldCover\n(adopted)", -5.86, -7.54, -4.35, NAVY, True),
+        ("NDBI > 0 alone  —  rejected", +20.49, None, None, RED, False),
     ]
     ys = np.arange(len(rows))[::-1]
 
@@ -74,25 +72,24 @@ def f1_sensitivity():
     ax.set_yticks(ys)
     ax.set_yticklabels([r[0] for r in rows], fontsize=13.5)
     ax.get_yticklabels()[0].set_fontweight("bold")
-    ax.set_xlim(-8.2, 14.2)
-    ax.set_ylim(-0.75, len(rows) - 0.25)
+    ax.set_xlim(-10.5, 24.5)
+    ax.set_ylim(-0.95, len(rows) - 0.05)
     ax.set_xlabel("Slope  (°C per unit of surface albedo)", fontsize=14)
-    ax.text(0.0, -0.285, "* development runs under alternative masks; the committed "
-            "notebook reproduces the adopted model and the rejected baseline",
-            transform=ax.transAxes, fontsize=10, color="#8a949d")
+    ax.text(0.0, -0.32, "300 spatial block bootstraps · 175,033 px in 188 blocks · "
+            "both masks are computed on every run and both values kept in summary.json",
+            transform=ax.transAxes, fontsize=10.5, color="#8a949d")
     ax.spines[["top", "right", "left"]].set_visible(False)
     ax.tick_params(axis="y", length=0)
     ax.grid(axis="x", alpha=0.22, lw=0.8)
 
     ax.annotate("sign-inverted — water (dark + cold) and\nbright sabkha (bright + hot) "
                 "in the mask.\nWe caught it; both values stay in summary.json.",
-                xy=(11.55, 0), xytext=(7.4, 1.30), fontsize=11.5, color=RED,
+                xy=(20.49, 0), xytext=(12.6, 1.42), fontsize=11.5, color=RED,
                 ha="center", linespacing=1.4,
                 arrowprops=dict(arrowstyle="->", color=RED, lw=1.4,
                                 connectionstyle="arc3,rad=-0.22"))
-    ax.text(-2.30, 3.0, "95% CI  [−6.05, −2.94]\n300 spatial block bootstraps",
-            fontsize=11.5, color="#4a5a6a", ha="left", va="center",
-            linespacing=1.4)
+    ax.text(-3.4, 1.0, "95% CI  [−7.54, −4.35]", fontsize=12, color="#4a5a6a",
+            ha="left", va="center")
     finish(fig, "f1_sensitivity")
 
 
@@ -102,7 +99,7 @@ def f1_sensitivity():
 def f2_concentration():
     fig, ax = plt.subplots(figsize=(7.4, 4.6))
     labels = ["Untargeted\n(any 100 roofs)", "Ranked\n(our top 100)"]
-    vals = [2.8, 20.8]
+    vals = [2.8, 20.9]
     bars = ax.bar(labels, vals, width=0.52, color=[GREY, NAVY], zorder=3)
     for b, v in zip(bars, vals):
         ax.text(b.get_x() + b.get_width()/2, v + 0.7, f"{v:.1f}%",
@@ -128,20 +125,15 @@ def f2_concentration():
 def f3_classifier():
     fig, ax = plt.subplots(figsize=(8.6, 4.4))
     metrics = ["accuracy", "precision", "recall", "F1", "IoU"]
-    ndbi = [0.465, 0.426, 0.856, 0.569, 0.398]
-    rf = [0.770, 0.675, 0.856, 0.754, 0.606]
+    ndbi = [0.458, 0.422, 0.844, 0.563, 0.392]
+    rf = [0.768, 0.673, 0.854, 0.753, 0.604]
     x = np.arange(len(metrics)); w = 0.37
     ax.bar(x - w/2, ndbi, w, label="NDBI > 0 baseline", color=GREY, zorder=3)
     ax.bar(x + w/2, rf, w, label="Random forest + texture", color=NAVY, zorder=3)
     for i, (xi, v) in enumerate(zip(x - w/2, ndbi)):
-        if metrics[i] == "recall":
-            continue                      # identical to RF — labelled once below
+        pass
         ax.text(xi, v + .018, f"{v:.3f}", ha="center", fontsize=11, color="#6b7680")
     for i, (xi, v) in enumerate(zip(x + w/2, rf)):
-        if metrics[i] == "recall":
-            ax.text(xi - w/2, v + .018, f"{v:.3f}  (identical)", ha="center",
-                    fontsize=11, color="#6b7680")
-            continue
         ax.text(xi, v + .018, f"{v:.3f}", ha="center", fontsize=11.5,
                 fontweight="bold", color=NAVY)
     ax.set_xticks(x); ax.set_xticklabels(metrics, fontsize=13)
@@ -151,7 +143,8 @@ def f3_classifier():
     ax.legend(frameon=False, fontsize=12.5, loc="upper left",
               bbox_to_anchor=(0.005, 1.03), ncol=2)
     ax.text(0.5, -0.22, "2 km blocks · 60/40 split · n = 95,346 test pixels · "
-            "recall identical, so the gain is all in false positives: 45,337 → 16,262",
+            "recall is unchanged, so the whole gain is in false positives: "
+            "45,533 → 16,345",
             transform=ax.transAxes, ha="center", fontsize=11, color="#5b6770")
     finish(fig, "f3_classifier", pad=0.35)
 
@@ -215,25 +208,25 @@ def f5_warming():
     labels = ["Built-up vs desert,\ntoday",
               "Built fabric warming\nvs desert, per decade",
               "Desert→built conversion,\nextra warming"]
-    vals = [1.33, 0.34, -0.01]
+    vals = [2.35, 0.23, -0.028]
     cols = [RED, AMBER, GREY]
-    stats = ["t = 78.6\np < 10⁻³⁰⁰", "t = 62.7\nd = 0.32", "t = −1.3\np = 0.21"]
+    stats = ["53.82 vs\n51.48 °C", "t = 47.0\nd = 0.24", "d = −0.025\n(negligible)"]
     bars = ax.bar(labels, vals, width=0.46, color=cols, zorder=3)
     for b, v, s in zip(bars, vals, stats):
         xc = b.get_x() + b.get_width()/2
-        ax.text(xc, v + 0.055 if v > 0 else 0.055, f"{v:+.2f} °C",
+        ax.text(xc, v + 0.085 if v > 0 else 0.16, f"{v:+.2f} °C",
                 ha="center", fontsize=17, fontweight="bold", color=b.get_facecolor())
-        ax.text(xc, -0.235, s, ha="center", fontsize=11, color="#5b6770")
+        ax.text(xc, -0.32, s, ha="center", fontsize=11, color="#5b6770")
     ax.axhline(0, color="#aab4bd", lw=1.2)
     ax.set_ylabel("Δ surface temperature (°C)", fontsize=13)
-    ax.set_ylim(-0.38, 1.72)
+    ax.set_ylim(-0.52, 2.95)
     ax.spines[["top", "right", "bottom"]].set_visible(False)
     ax.grid(axis="y", alpha=0.22, lw=0.8)
     ax.tick_params(axis="x", length=0, pad=26, labelsize=12.5)
-    ax.text(2, 0.92, "a null result, reported as one —\nthat land was already 1.44 °C "
-            "hotter\nbefore anything was built on it",
-            fontsize=11.5, color="#4a5a6a", ha="center", va="bottom",
-            linespacing=1.5)
+    ax.text(2, 1.30, "flagged significant, and meaningless —\nd = 0.025 with n in the "
+            "hundreds of thousands.\nThat land was already 2.48 °C hotter\nbefore anything "
+            "was built on it.",
+            fontsize=11, color="#4a5a6a", ha="center", va="bottom", linespacing=1.5)
     ax.set_title("The heat problem is intensifying inside the city that already exists",
                  fontsize=15, pad=12, loc="left")
     finish(fig, "f5_warming", pad=0.3)
@@ -293,7 +286,7 @@ if __name__ == "__main__":
 # ---------------------------------------------------------------------------
 def f7_roof_confound():
     import pandas as pd, scipy.stats as sps
-    r = pd.read_csv("/home/claude/mainres/roof_priority_ranked.csv")
+    r = pd.read_csv("/home/claude/run2/results/roof_priority_ranked.csv")
     r["q"] = pd.qcut(r.area_m2, 5, labels=False)
     xs, ys, ps, ns, med = [], [], [], [], []
     for q in range(5):
@@ -320,15 +313,15 @@ def f7_roof_confound():
             ha="center", fontsize=10.5, color="#4a5a6a", linespacing=1.4)
 
     ax.axhline(0, color="#aab4bd", lw=1.2)
-    ax.axhline(-4.56, color=NAVY, lw=2, ls="--", zorder=2)
-    ax.text(-0.42, -4.56, " pixel-level marginal effect  −4.56", va="bottom",
+    ax.axhline(-5.86, color=NAVY, lw=2, ls="--", zorder=2)
+    ax.text(-0.42, -5.86, " pixel-level marginal effect  −5.86", va="bottom",
             fontsize=11, color=NAVY, fontweight=600)
 
     ax.set_xticks(xs + [5.1])
     ax.set_xticklabels([f"Q{q+1}\n{m:,.0f} m²\n{m/900:.1f} px" for q, m in zip(xs, med)]
                        + ["≥5,000 m²\n~5.5 px\n(cleanest)"], fontsize=10)
     ax.set_ylabel("Roof-level slope\n(°C per unit albedo)", fontsize=12)
-    ax.set_ylim(-6.2, 12.4)
+    ax.set_ylim(-7.4, 11.0)
     ax.spines[["top", "right", "bottom"]].set_visible(False)
     ax.tick_params(axis="x", length=0, pad=16)
     ax.grid(axis="y", alpha=0.22, lw=0.8)

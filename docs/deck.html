@@ -305,9 +305,9 @@
   <div class="body">
     <table>
       <tr><th>Product</th><th>Provider</th><th>Dates</th><th>Scenes</th><th>Resolution</th><th>Licence</th></tr>
-      <tr><td class="k">Landsat 8/9 C2 L2SP</td><td>USGS / NASA</td><td class="n">2014-05 → 2015-11</td><td class="n">40 · cloud &lt;15% · 88% May–Sept</td><td class="n">30 m</td><td>Public domain</td></tr>
-      <tr><td class="k">Landsat 8/9 C2 L2SP</td><td>USGS / NASA</td><td class="n">2024-10 → 2026-09</td><td class="n">40 · cloud &lt;15% · 72% May–Sept</td><td class="n">30 m</td><td>Public domain</td></tr>
-      <tr><td class="k">Sentinel-2 L2A</td><td>ESA Copernicus</td><td class="n">2025-09 → 2026-09</td><td class="n">20 · cloud &lt;15% · <strong>20% May–Sept</strong></td><td class="n">10–20 m</td><td>Free and open</td></tr>
+      <tr><td class="k">Landsat 8/9 C2 L2SP</td><td>USGS / NASA</td><td class="n">2014-05 → 2016-09</td><td class="n">40 · cloud &lt;15% · <strong>May–Sept only</strong></td><td class="n">30 m</td><td>Public domain</td></tr>
+      <tr><td class="k">Landsat 8/9 C2 L2SP</td><td>USGS / NASA</td><td class="n">2024-05 → 2026-09</td><td class="n">40 · cloud &lt;15% · <strong>May–Sept only</strong></td><td class="n">30 m</td><td>Public domain</td></tr>
+      <tr><td class="k">Sentinel-2 L2A</td><td>ESA Copernicus</td><td class="n">2022-09 → 2026-09</td><td class="n">20 · cloud &lt;15% · <strong>May–Sept only</strong>, 5 summers</td><td class="n">10–20 m</td><td>Free and open</td></tr>
       <tr class="hl"><td class="k">NASA EMIT L2A reflectance</td><td>NASA JPL / LP DAAC</td><td class="n">2026-05-20, 15:03 local</td><td class="n">1 granule</td><td class="n">60 m · 285 bands</td><td>Open</td></tr>
       <tr><td class="k">ESA WorldCover v200</td><td>ESA</td><td class="n">2021</td><td class="n">tile N24E054</td><td class="n">10 m</td><td>CC BY 4.0</td></tr>
       <tr><td class="k">OpenStreetMap buildings</td><td>OSM contributors</td><td class="n">2026-10-07</td><td class="n">8,503 raw footprints</td><td>vector</td><td>ODbL</td></tr>
@@ -347,7 +347,7 @@
         <div class="tag">Step 1 — surface temperature</div>
         <p>Landsat <span style="font-family:ui-monospace,monospace">lwir11</span>, scaled to
         kelvin, <span style="font-family:ui-monospace,monospace">qa_pixel</span> bit-masked for
-        cloud, shadow, cirrus and fill. Per-pixel median, two epoch windows.</p>
+        cloud, shadow, cirrus and fill. <strong>May–Sept only</strong>, per-pixel median.</p>
       </div>
       <div class="card">
         <div class="tag">Step 2 — built-up mask</div>
@@ -356,12 +356,12 @@
       </div>
       <div class="card">
         <div class="tag">Step 3 — albedo and sensitivity</div>
-        <p>Sentinel-2 narrow-to-broadband albedo (Bonafoni &amp; Sekertekin 2020), regressed
+        <p>Sentinel-2 narrow-to-broadband albedo (Bonafoni &amp; Sekertekin 2020) from the <strong>same months</strong>, regressed
         against temperature under <strong>spatial block cross-validation</strong>.</p>
       </div>
       <div class="card">
         <div class="tag">Step 4 — the worklist</div>
-        <p>Zonal statistics per OSM footprint, <strong>ΔT = 4.56 × (0.60 − α)</strong>, ranked
+        <p>Zonal statistics per OSM footprint, <strong>ΔT = 5.86 × (0.60 − α)</strong>, ranked
         under three objectives with EMIT material class attached.</p>
       </div>
     </div>
@@ -375,16 +375,16 @@
   <h2>We measured the lever instead of assuming it</h2>
   <p class="sub">
     Most cool-roof proposals quote a cooling figure from the literature — usually from a
-    temperate city. We estimated it from Abu Dhabi's own surfaces, under spatial block
-    cross-validation, and re-estimated it under three independent built-up classifications.
+    temperate city. We estimated it from Abu Dhabi's own summer surfaces, under spatial
+    block cross-validation, against a deliberately contaminated mask as a control.
   </p>
   <div class="body">
     <div class="figwrap"><img src="fig/f1_sensitivity.png"></div>
     <div class="stats" style="margin-top:6px;">
-      <div class="stat"><div class="v">−4.56 °C</div><div class="k">per unit of albedo, 95% CI [−6.05, −2.94]</div></div>
-      <div class="stat"><div class="v">0.46 °C</div><div class="k">cooling per +0.10 albedo [0.30, 0.60]</div></div>
-      <div class="stat"><div class="v">152,487</div><div class="k">pixels in 159 spatial blocks</div></div>
-      <div class="stat"><div class="v">0.057</div><div class="k">spatial-CV R² — and we report it plainly</div></div>
+      <div class="stat"><div class="v">−5.86 °C</div><div class="k">per unit of albedo, 95% CI [−7.54, −4.35]</div></div>
+      <div class="stat"><div class="v">0.59 °C</div><div class="k">cooling per +0.10 albedo [0.44, 0.75]</div></div>
+      <div class="stat"><div class="v">175,033</div><div class="k">pixels in 188 spatial blocks</div></div>
+      <div class="stat"><div class="v">0.130</div><div class="k">spatial-CV R² — and we report it plainly</div></div>
     </div>
   </div>
   <div class="foot"><span>5-fold spatial block CV, 1 km blocks · 300 block bootstrap resamples</span><span>7</span></div>
@@ -407,12 +407,12 @@
         <div class="eyebrow" style="margin-bottom:8px;">Three ranking modes ship in the CSV</div>
         <table class="tight">
           <tr><th>Objective</th><th>Top-100 area</th><th>Mean LST</th><th>Avoided absorption</th></tr>
-          <tr class="hl"><td class="k">Total benefit<br><span style="font-weight:400;color:var(--mute)">area × cooling</span></td><td class="n">106.6 ha</td><td class="n">54.5 °C</td><td class="n"><strong>64.8 MW</strong></td></tr>
-          <tr><td class="k">Hottest roofs first</td><td class="n">47.7 ha</td><td class="n">56.5 °C</td><td class="n">26.9 MW</td></tr>
-          <tr><td class="k">Biggest per-roof ΔT</td><td class="n">5.0 ha</td><td class="n">51.7 °C</td><td class="n">5.7 MW</td></tr>
+          <tr class="hl"><td class="k">Total benefit<br><span style="font-weight:400;color:var(--mute)">area × cooling</span></td><td class="n">99.4 ha</td><td class="n">54.5 °C</td><td class="n"><strong>56.5 MW</strong></td></tr>
+          <tr><td class="k">Hottest roofs first</td><td class="n">48.1 ha</td><td class="n">56.8 °C</td><td class="n">22.3 MW</td></tr>
+          <tr><td class="k">Biggest per-roof ΔT</td><td class="n">5.0 ha</td><td class="n">52.3 °C</td><td class="n">5.4 MW</td></tr>
         </table>
         <div class="pull" style="margin-top:18px;">
-          Only <em>27 of 100</em> roofs appear on both the "total benefit" and "hottest" lists.
+          Only <em>21 of 100</em> roofs appear on both the "total benefit" and "hottest" lists.
           The choice of objective genuinely changes which buildings get treated — so it belongs
           to the municipality, not to us. All three ship.
         </div>
@@ -479,26 +479,27 @@
       <div style="flex:1;">
         <div class="card warn" style="margin-bottom:14px;">
           <div class="tag">A sign error we caught and fixed</div>
-          <p>Our first mask (<span style="font-family:ui-monospace,monospace">NDBI&nbsp;&gt;&nbsp;0</span>
-          alone) gave <strong>+11.55</strong> — brighter surfaces appearing hotter, inverting
+          <p>A loose mask (<span style="font-family:ui-monospace,monospace">NDBI&nbsp;&gt;&nbsp;0</span>
+          alone) gives <strong>+20.49</strong> — brighter surfaces appearing hotter, inverting
           the physics. Cause: channel water (dark <em>and</em> cold) anchoring the low end,
           bright sabkha (bright <em>and</em> very hot) anchoring the high end. Requiring
           agreement with an independent land-cover product recovered the expected negative
-          slope. <strong>Both values stay in summary.json — the audit trail is part of the
-          evidence.</strong></p>
+          slope. The notebook computes <strong>both masks on every run</strong> and keeps
+          both values in summary.json — the audit trail is part of the evidence.</p>
         </div>
         <div class="card">
-          <div class="tag">On the low R² (0.057)</div>
+          <div class="tag">On the R² (0.130)</div>
           <p>We estimate a <strong>marginal effect, not a prediction</strong>. Absolute surface
           temperature is driven mostly by factors we do not model — thermal mass, moisture,
-          building use, HVAC exhaust. The coefficient on albedo is nonetheless tightly
-          constrained: its entire 95% interval lies below zero and it is stable across
-          independent spatial folds and three classification methods.</p>
+          building use, HVAC exhaust. The coefficient is nonetheless tightly constrained: its
+          entire 95% interval lies below zero. Matching the albedo and temperature seasons
+          <strong>more than doubled R², from 0.057</strong> — the strongest evidence that the
+          season filter was the right call.</p>
         </div>
       </div>
     </div>
   </div>
-  <div class="foot"><span>Top features: swir 0.132 · mndwi 0.116 · tex_bright_5 0.108 — texture is a quarter of the model's decision weight</span><span>11</span></div>
+  <div class="foot"><span>Top features: swir 0.133 · mndwi 0.127 · tex_bright_5 0.109 — texture is a quarter of the model's decision weight</span><span>11</span></div>
 </section>
 
 <!-- ============================================================ 12 ROOF CONFOUND -->
@@ -508,17 +509,17 @@
   <p class="sub">
     We ranked the roofs, then tested the ranking against itself: across the 3,603 buildings,
     is a brighter roof a cooler roof? <strong>No</strong> — the raw association is
-    <strong>+8.1 °C per unit albedo</strong> (p ≈ 10⁻⁹⁰) and survives controlling for roof
-    size (+6.2). We report it because a reviewer who opens our own CSV will find it.
+    <strong>+6.6 °C per unit albedo</strong> (p ≈ 10⁻⁷⁵) and survives controlling for roof
+    size (+4.8). We report it because a reviewer who opens our own CSV will find it.
   </p>
   <div class="body">
     <div class="figwrap" style="flex:1; min-height:0;"><img src="fig/f7_roof_confound.png"></div>
     <div class="cards steps" style="margin-top:14px;">
       <div class="card">
         <div class="tag">Part of it is the thermal pixel</div>
-        <p>Landsat thermal is 30 m; the median roof here is <strong>796 m², under one
+        <p>Landsat thermal is 30 m; the median roof here is <strong>795 m², under one
         pixel</strong>, so its "roof temperature" is largely its surroundings. Strongest
-        for sub-pixel roofs (+9.7), falling to <strong>+3.4, not significant</strong>, for
+        for sub-pixel roofs (+7.7), falling to <strong>+2.9, not significant</strong>, for
         the 93 roofs spanning ~5 clean pixels.</p>
       </div>
       <div class="card">
@@ -529,9 +530,9 @@
         it.</p>
       </div>
       <div class="card accent">
-        <div class="tag">Why this does not refute −4.56</div>
+        <div class="tag">Why this does not refute −5.86</div>
         <p>Two different questions. <strong>"Do brighter surfaces run cooler, location and
-        vegetation fixed?"</strong> — yes, −4.56 within spatial blocks. <strong>"Are
+        vegetation fixed?"</strong> — yes, −5.86 within spatial blocks. <strong>"Are
         buildings with brighter roofs cooler buildings?"</strong> — no, which is a fact
         about which buildings have bright roofs, not about radiation.</p>
       </div>
@@ -555,8 +556,11 @@
       <div class="card warn">
         <div class="tag">A null result we report as one</div>
         <p>Land converted from desert to built-up <strong>did not warm more</strong> than desert
-        left untouched (−0.01 °C, p = 0.21). Before any construction, that land was already
-        <strong>1.44 °C hotter</strong> than desert that stayed desert. Two explanations fit —
+        left untouched: −0.03 °C, flagged significant at p = 10⁻⁵ but with <strong>Cohen's
+        d = 0.025</strong> — with n in the hundreds of thousands a p-value detects any
+        departure from zero, and this one is a twenty-fifth of a standard deviation. Before
+        any construction that land was already <strong>2.48 °C hotter</strong> than desert
+        that stayed desert. Two explanations fit —
         <strong>siting</strong> (development hugs existing urban fabric) and <strong>site
         preparation</strong> (clearing removes the salt crust and shallow moisture of natural
         sabkha) — and <strong>we cannot separate them</strong> with the data we have.</p>
@@ -573,8 +577,8 @@
     </div>
     <ul class="two">
       <li class="bad"><strong>The per-roof ΔT is not validated at roof scale</strong> — see the previous slide. It is a screening estimate, not an engineering prediction.</li>
-      <li class="bad"><strong>Composites are warm-season-weighted, not summer-only</strong> (88% / 72% May–Sept). The later epoch carries more cool-season scenes, so the +0.94 °C warming is <strong>conservative</strong>.</li>
-      <li class="bad"><strong>Albedo and temperature come from different seasons</strong> — only 4 of 20 Sentinel-2 scenes are May–Sept. Restricting both to summer over a wider window is the first fix.</li>
+      <li class="bad"><strong>The albedo composite is September-weighted</strong> within the summer — 17 of 20 Sentinel-2 scenes. Far better than the cool-season composite it replaced, but still not sampled identically to temperature.</li>
+      <li class="bad"><strong>Albedo spans five summers, temperature three.</strong> A roof re-covered in 2023 contributes its old surface to the albedo median.</li>
       <li class="bad">Land surface temperature is <strong>not air temperature</strong>. This ranks surfaces; it does not predict heat-stroke risk.</li>
       <li class="bad">The sensitivity is <strong>correlational</strong>. Roof thermal mass, building use and HVAC exhaust are not separated.</li>
       <li class="bad">Validation is against <strong>ESA WorldCover, itself a model</strong>. No field survey was performed.</li>
@@ -596,7 +600,7 @@
     <div class="stats">
       <div class="stat"><div class="v">3,603</div><div class="k">roofs ranked — 4.82 km² of roof area</div></div>
       <div class="stat"><div class="v amber">7.5×</div><div class="k">benefit concentration in the top 100 roofs</div></div>
-      <div class="stat"><div class="v red">64.8 MW</div><div class="k">avoided solar absorption, summer mean</div></div>
+      <div class="stat"><div class="v red">56.5 MW</div><div class="k">avoided solar absorption, summer mean</div></div>
       <div class="stat"><div class="v">AED 0</div><div class="k">data cost — every input free and open</div></div>
     </div>
     <div class="cards" style="margin-top:6px;">

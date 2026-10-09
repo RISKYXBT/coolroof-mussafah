@@ -4,11 +4,6 @@
 **Theme:** Urban Expansion, Land Use Change & Heat Risk  ·  **Track:** Hyperspectral Data Track
 **Team:** T0050 · United Arab Emirates
 
-> **⚠ Mid-update — 9 Oct 2026.** `notebooks/02_main_analysis.ipynb` has just gained a
-> May–September season filter on every composite (see §9.7). The contents of `results/`
-> and the figures quoted below are from the **previous, unfiltered** run and will be
-> regenerated. Until that lands, the notebook and the committed results do not match.
-
 > Satellite screening that turns a city heat map into a ranked worklist of individual
 > rooftops — with the cooling-per-retrofit **measured from Abu Dhabi's own data**, and
 > the roof material identified from **NASA EMIT hyperspectral imagery over Mussafah
@@ -91,12 +86,12 @@ evapotranspirative cooling disappears, and stored heat is re-radiated through th
 In Mussafah, Abu Dhabi's principal industrial district, a decade of Landsat observation
 shows:
 
-- **30.4 km² (3,045 hectares) of bare desert converted to built-up land** between
+- **30.2 km² (3,023 hectares) of bare desert converted to built-up land** between
   2014–2016 and 2024–2026
-- built-up surfaces today run **+1.33 °C hotter** than surrounding bare desert
-  (t = 78.6, p < 10⁻³⁰⁰)
-- **the existing built fabric is warming 0.34 °C per decade faster than the desert
-  around it** (t = 62.7, p < 10⁻³⁰⁰, Cohen's d = 0.32)
+- built-up surfaces today run **+2.35 °C hotter** than surrounding bare desert
+  (53.82 °C against 51.48 °C in the summer composite)
+- **the existing built fabric is warming 0.23 °C per decade faster than the desert
+  around it** (t = 47.0, p < 10⁻³⁰⁰, Cohen's d = 0.24)
 
 The third point is what makes retrofit, rather than new-build regulation, the right
 lever: **the heat problem is intensifying inside the city that already exists**, not at
@@ -113,9 +108,9 @@ three for every roof simultaneously, repeatedly, without site access.
 
 | Product | Provider | Level | Dates | Scenes | Resolution | Licence |
 |---|---|---|---|---|---|---|
-| Landsat 8/9 Collection 2 Level-2 | USGS / NASA | L2SP | 2014-05-18 → 2015-11-04 | 40, cloud < 15% (88% May–Sept) | 30 m | Public domain |
-| Landsat 8/9 Collection 2 Level-2 | USGS / NASA | L2SP | 2024-10-03 → 2026-09-24 | 40, cloud < 15% (72% May–Sept) | 30 m | Public domain |
-| Sentinel-2 L2A | ESA Copernicus | L2A | 2025-09-24 → 2026-09-27 | 20, cloud < 15% (**20% May–Sept** — see §9.7) | 10–20 m | Free and open |
+| Landsat 8/9 Collection 2 Level-2 | USGS / NASA | L2SP | 2014-05-18 → 2016-09-28 | 40, cloud < 15%, **May–Sept only** | 30 m | Public domain |
+| Landsat 8/9 Collection 2 Level-2 | USGS / NASA | L2SP | 2024-05-29 → 2026-09-24 | 40, cloud < 15%, **May–Sept only** | 30 m | Public domain |
+| Sentinel-2 L2A | ESA Copernicus | L2A | 2022-09-13 → 2026-09-27 | 20, cloud < 15%, **May–Sept only** (five summers) | 10–20 m | Free and open |
 | **NASA EMIT L2A surface reflectance** | **NASA JPL / LP DAAC** | **L2A** | **2026-05-20, 15:03 local** | **1 granule** | **60 m, 285 bands** | **Open** |
 | ESA WorldCover v200 | ESA | — | 2021 | tile N24E054 | 10 m | CC BY 4.0 |
 | OpenStreetMap buildings | OSM contributors | — | 2026-10-07 | 8,503 raw | vector | ODbL |
@@ -291,15 +286,15 @@ they are openly retrievable with the recorded parameters.
 
 | Quantity | Value |
 |---|---|
-| Mean composite LST, 2014–2016 → 2024–2026 | 49.62 °C → 50.56 °C |
-| Desert converted to built-up | **30.4 km² (3,045 ha)** |
-| Static surface UHI (built-up vs desert, today) | **+1.33 °C** (t = 78.6, p < 10⁻³⁰⁰) |
-| Existing built fabric warming vs desert | **+0.34 °C/decade** (t = 62.7, d = 0.32) |
-| **Measured albedo sensitivity** | **−4.56 °C per unit albedo**, 95% CI **[−6.05, −2.94]** |
-| → cooling per +0.10 albedo | **0.46 °C** [0.29, 0.61] |
+| Mean summer LST, 2014–2016 → 2024–2026 | 49.89 °C → 50.89 °C |
+| Desert converted to built-up | **30.2 km² (3,023 ha)** |
+| Static surface UHI (built-up vs desert, today) | **+2.35 °C** (53.82 vs 51.48 °C, `transition_summary.csv`) |
+| Existing built fabric warming vs desert | **+0.23 °C/decade** (t = 47.0, d = 0.24) |
+| **Measured albedo sensitivity** | **−5.86 °C per unit albedo**, 95% CI **[−7.54, −4.35]** |
+| → cooling per +0.10 albedo | **0.59 °C** [0.44, 0.75] |
 | Roofs ranked | 3,603 (4.82 km² of roof) |
-| Top 100 roofs | 20.8% of total benefit — **7.5× concentration** |
-| Avoided solar absorption, top 100 | **64.8 MW** summer-mean, 205 MW at noon peak |
+| Top 100 roofs | 20.9% of total benefit — **7.5× concentration** |
+| Avoided solar absorption, top 100 | **56.5 MW** summer-mean, 179 MW at noon peak |
 
 ### 9.2 Validation
 
@@ -308,16 +303,16 @@ blocks only (n = 95,346 test pixels):
 
 | Metric | NDBI > 0 baseline | Random forest |
 |---|---|---|
-| accuracy | 0.465 | **0.770** |
-| precision | 0.426 | **0.675** |
-| recall | 0.856 | 0.856 |
-| F1 | 0.569 | **0.754** |
-| IoU | 0.398 | **0.606** |
-| false positives | 45,337 | **16,262** |
+| accuracy | 0.458 | **0.768** |
+| precision | 0.422 | **0.673** |
+| recall | 0.844 | **0.854** |
+| F1 | 0.563 | **0.753** |
+| IoU | 0.392 | **0.604** |
+| false positives | 45,533 | **16,345** |
 | predicted built-up share | 82.9% | 52.4% *(reference 41.3%)* |
 
-Top features: `swir` 0.132, `mndwi` 0.116, **`tex_bright_5` 0.108**, `brightness` 0.079,
-**`tex_swir_5` 0.074**, `nir` 0.072, **`tex_swir_9` 0.067**. The three texture features
+Top features: `swir` 0.133, `mndwi` 0.127, **`tex_bright_5` 0.109**, **`tex_swir_5` 0.072**,
+**`tex_swir_9` 0.070**, `brightness` 0.069, `red` 0.063. The three texture features
 account for roughly a quarter of the model's decision weight — direct evidence for why
 the spectral index alone failed.
 
@@ -325,49 +320,65 @@ the spectral index alone failed.
 
 | | |
 |---|---|
-| slope | −4.56 °C per unit albedo |
-| 95% CI (300 block bootstrap resamples) | **[−6.05, −2.94]** |
-| spatial-CV R² | 0.057 |
-| spatial-CV RMSE | 1.47 °C |
-| n | 152,487 px in 159 blocks |
+| slope | −5.86 °C per unit albedo |
+| 95% CI (300 block bootstrap resamples) | **[−7.54, −4.35]** |
+| spatial-CV R² | 0.130 |
+| spatial-CV RMSE | 1.70 °C |
+| n | 175,033 px in 188 blocks |
 
-**On the low R².** The model explains 5% of the variance in absolute LST, and we report
+**On the low R².** The model explains 13% of the variance in absolute LST, and we report
 that plainly. It does not undermine the result, because **we estimate a marginal effect,
 not a prediction**. Absolute surface temperature over built land is driven mostly by
 factors we do not model — thermal mass, moisture, building use, HVAC exhaust. The
 coefficient on albedo is nonetheless tightly constrained: its entire 95% interval lies
 below zero and it is stable across independent spatial folds.
 
-**Robustness across methods.** The sensitivity was estimated three times under three
-different built-up classifications:
-
-| Classification | Slope |
-|---|---|
-| WorldCover mask + water/vegetation exclusion | −4.07 |
-| Calibrated NDBI threshold + WorldCover | −4.55 |
-| Random forest + WorldCover | **−4.56** |
-
-The first two were development runs under alternative masks. The committed notebook
-reproduces the adopted model (−4.56) and the rejected baseline (+11.55); `summary.json`
-records both.
-
-**A sign error we caught and fixed.** Our first mask (`NDBI > 0` alone) gave a slope of
-**+11.55** — brighter surfaces appearing hotter, inverting the physics. The cause was
+**A sign error we caught and fixed.** A loose mask (`NDBI > 0` alone) gives a slope of
+**+20.49** — brighter surfaces appearing hotter, inverting the physics. The cause is
 contamination: channel water (dark *and* cold) anchoring the low-albedo end, bright
 sabkha (bright *and* very hot) anchoring the high end. Requiring agreement with an
-independent land-cover product recovered the expected negative slope. `summary.json`
-retains both values, because the audit trail is part of the evidence.
+independent land-cover product recovers the expected negative slope. The notebook
+computes **both** masks on every run and `summary.json` keeps both values, because the
+audit trail is part of the evidence.
 
-### 9.3 A null result, reported as such
+**What the season filter changed.** An earlier version of this analysis selected scenes
+by lowest cloud over a continuous date range, with no month filter. That produced
+composites which were 88%, 72% and 20% May–Sept respectively, and regressed a
+warm-season temperature composite on a **cool-season** albedo composite — Gulf summer
+dust and haze trip the Sentinel-2 cloud mask, so "cleanest" quietly meant "winter".
+Restricting every composite to May–September, over a Sentinel-2 window widened to five
+summers so enough clean scenes exist:
 
-**Land converted from desert to built-up did *not* warm more than desert left untouched**
-(−0.01 °C, t = −1.3, p = 0.21, d = −0.008).
+| | unfiltered | May–Sept only |
+|---|---|---|
+| albedo sensitivity | −4.56 | **−5.86** |
+| 95% CI | [−6.05, −2.94] | **[−7.54, −4.35]** |
+| spatial-CV R² | 0.057 | **0.130** |
+| pixels / blocks | 152,487 / 159 | 175,033 / 188 |
+| static UHI | +1.33 °C | **+2.35 °C** |
+
+Matching the seasons **more than doubled the explained variance** and strengthened the
+effect. The season composition of every composite is written into `summary.json` under
+`season_filter` and into `provenance.json`, so it can be checked without recomputing
+from scene IDs.
+
+### 9.3 Conversion buys no extra warming — a significant result that means nothing
+
+**Land converted from desert to built-up did not warm more than desert left untouched.**
+The contrast is **−0.028 °C** (t = −4.0, p = 6.6 × 10⁻⁵, **Cohen's d = −0.025**).
+
+It is flagged SIGNIFICANT, and that label should be ignored. With n in the hundreds of
+thousands, a p-value detects any departure from exactly zero; **d = −0.025 is a
+twenty-fifth of a standard deviation**, which is nothing. Converted land is not
+measurably warmer than desert, and if anything it is a hair cooler. We report the
+effect size alongside every p-value in `significance_tests.csv` for exactly this
+reason.
 
 The diagnostic explains why. In 2014–2016, *before any construction*, land that would
-later be built on was already **1.44 °C hotter** than desert that stayed desert
-(53.00 °C vs 51.55 °C) while being spectrally almost indistinguishable from it (NDBI
-0.055 vs 0.058). Its slightly lower brightness accounts, using our own measured
-sensitivity, for only ≈0.11 °C of that gap.
+later be built on was already **2.48 °C hotter** than desert that stayed desert
+(53.23 °C vs 50.74 °C) while being spectrally almost indistinguishable from it. The
+pre-existing gap is an order of magnitude larger than the conversion effect, which is
+why conversion adds nothing detectable on top of it.
 
 Two explanations fit and **we cannot separate them**:
 
@@ -384,23 +395,23 @@ natural next step.
 
 We ranked the roofs, then tested the ranking against itself. Across the 3,603 buildings,
 **a brighter roof is not a cooler roof**: the cross-sectional association is
-**+8.11 °C per unit albedo** (p ≈ 10⁻⁹⁰, r² = 0.107), and it survives controlling for
-roof size (+6.20). That is the opposite sign to the −4.56 the product is built on, and it
+**+6.59 °C per unit albedo** (p ≈ 10⁻⁷⁵, r² = 0.089), and it survives controlling for
+roof size (+4.82). That is the opposite sign to the −5.86 the product is built on, and it
 is visible in panel 3 of `results/05_roof_priority.png` — a file we ship. Reporting it is
 not optional.
 
 **Part of it is the thermal pixel.** Landsat thermal is 30 m, so one pixel is 900 m². The
-median roof in the ranking is 796 m² — under one pixel — and its "roof temperature" is
+median roof in the ranking is 795 m² — under one pixel — and its "roof temperature" is
 therefore largely its surroundings. Splitting by roof size:
 
 | Roof size | median area | ≈ Landsat px | slope | p |
 |---|---|---|---|---|
-| Q1 | 438 m² | 0.5 | **+9.69** | 10⁻²⁷ |
-| Q2 | 573 m² | 0.6 | +5.62 | 10⁻¹⁰ |
-| Q3 | 796 m² | 0.9 | +1.59 | 0.035 |
-| Q4 | 1,185 m² | 1.3 | +4.17 | 10⁻⁶ |
-| Q5 | 2,399 m² | 2.7 | +5.05 | 10⁻⁶ |
-| ≥ 5,000 m² (n = 93) | — | ~5.5 | +3.45 | **0.24, not significant** |
+| Q1 | 438 m² | 0.5 | **+7.74** | 10⁻²¹ |
+| Q2 | 573 m² | 0.6 | +4.14 | 10⁻⁷ |
+| Q3 | 795 m² | 0.9 | +2.29 | 10⁻⁴ |
+| Q4 | 1,185 m² | 1.3 | +2.39 | 0.003 |
+| Q5 | 2,399 m² | 2.7 | +4.62 | 10⁻⁷ |
+| ≥ 5,000 m² (n = 93) | — | ~5.5 | +2.88 | **0.23, not significant** |
 
 The association is strongest where the pixel is dirtiest and is not significant for the
 93 roofs that span a clean pixel — but it does not flip negative, so mixing is not the
@@ -411,7 +422,7 @@ systematically different buildings: larger, newer, set in wider paved yards, wit
 different roof thermal mass and internal heat loads. None of those are in our data, and
 none of them are removed by comparing across buildings.
 
-**Why this does not refute −4.56.** The two numbers answer different questions. The
+**Why this does not refute −5.86.** The two numbers answer different questions. The
 pixel-level model asks *does a brighter surface run cooler, holding location and
 vegetation roughly fixed* — a within-block marginal effect, and the answer is yes. The
 roof cross-section asks *are buildings that happen to have brighter roofs cooler
@@ -434,11 +445,11 @@ temperature drop for a named building.
 
 | Mode | Top-100 area | Mean albedo | Mean LST | Avoided absorption |
 |---|---|---|---|---|
-| Total benefit (area × cooling) | 106.6 ha | 0.387 | 54.5 °C | 64.8 MW |
-| Hottest roofs first | 47.7 ha | 0.404 | 56.5 °C | 26.9 MW |
-| Biggest per-roof ΔT | 5.0 ha | 0.220 | 51.7 °C | 5.7 MW |
+| Total benefit (area × cooling) | 99.4 ha | 0.395 | 54.5 °C | 56.5 MW |
+| Hottest roofs first | 48.1 ha | 0.426 | 56.8 °C | 22.3 MW |
+| Biggest per-roof ΔT | 5.0 ha | 0.245 | 52.3 °C | 5.4 MW |
 
-Only **27 of 100 roofs** appear on both the "total benefit" and "hottest" lists. The
+Only **21 of 100 roofs** appear on both the "total benefit" and "hottest" lists. The
 choice of objective genuinely changes which buildings get treated, so it belongs to the
 municipality. All three ship in the CSV.
 
@@ -483,25 +494,16 @@ urban product over Gulf cities, including Satellite 813, will face the same cons
 
 ### 9.7 Limitations
 
-- **The composites are warm-season-weighted, not summer-only.** The epoch windows are
-  continuous date ranges and scenes are selected by lowest cloud, not by month, so the
-  Landsat composites are **88% May–Sept for 2014–2016 and 72% for 2024–2026** (the rest
-  April, October, November). The seasonal mix therefore differs between epochs, and the
-  later epoch carries more cool-season imagery — which biases the epoch-to-epoch warming
-  figure (+0.94 °C) **downward**, so that number is conservative rather than inflated.
-  The static UHI and the per-decade trend compare land classes *within* a composite, so
-  the seasonal mix affects both classes alike and largely cancels. Every scene ID is in
-  `data/sample_input/provenance.json`; the month breakdown above is recomputed from it.
-- **Albedo and temperature are measured in different seasons.** Only **4 of the 20
-  Sentinel-2 scenes fall in May–Sept**; the albedo composite is dominated by
-  October–February imagery, because the Gulf's summer dust and haze are flagged by the
-  cloud mask and the lowest-cloud scenes are therefore cool-season. Surface albedo of
-  built materials is fairly stable through the year, but solar zenith angle at 24°N
-  differs sharply between December and June and dust deposition is seasonal, so the
-  albedo values carry an unquantified offset from their summer values. The −4.56
-  sensitivity regresses a warm-season LST composite on a cool-season albedo composite.
-  Restricting both to May–Sept, over a wider multi-year window so enough clean summer
-  scenes are available, is the first thing we would change.
+- **The albedo composite is September-weighted within the summer.** Every composite is
+  now May–Sept only, but of the 20 Sentinel-2 scenes **17 fall in September**, two in
+  June and one in July: the cloud mask still prefers the end of the dust season. Abu
+  Dhabi in September is hot, so this is a far smaller mismatch than the cool-season
+  composite it replaced, but albedo and temperature are still not sampled identically
+  within the season.
+- **The albedo composite spans five summers (2022–2026)** while the temperature
+  composite spans three (2024–2026). A roof re-covered in 2023 contributes its old
+  surface to the albedo median. Narrowing the albedo window needs either a higher cloud
+  threshold or acceptance of fewer scenes.
 - **The per-roof ΔT is not validated at roof scale.** See §9.4 — the roof cross-section
   shows the opposite sign, for reasons we can partly but not fully attribute to mixed
   thermal pixels. Treat the ΔT column as a prioritisation score.

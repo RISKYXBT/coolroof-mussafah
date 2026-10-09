@@ -21,49 +21,89 @@
     "landsat_after": 40,
     "sentinel2": 20
   },
-  "mean_lst_before_c": 49.62,
-  "mean_lst_after_c": 50.56,
-  "desert_to_builtup_km2": 30.45,
-  "desert_to_builtup_hectares": 3045,
-  "static_uhi_c": 1.33,
-  "conversion_extra_warming_c": -0.01,
-  "conversion_verdict": "not significant",
-  "pre_construction_temperature_gap_c": 1.44,
+  "season_filter": {
+    "months": [
+      5,
+      9
+    ],
+    "note": "Every composite is restricted to these months. Without the filter, scene selection by lowest cloud produced composites that were 88% / 72% / 20% in-season and paired a warm-season LST with a cool-season albedo.",
+    "composition": {
+      "2014-2016": {
+        "by_month": {
+          "5": 7,
+          "6": 9,
+          "7": 8,
+          "8": 8,
+          "9": 8
+        },
+        "in_season": 40,
+        "total": 40
+      },
+      "2024-2026": {
+        "by_month": {
+          "5": 7,
+          "6": 14,
+          "7": 6,
+          "8": 6,
+          "9": 7
+        },
+        "in_season": 40,
+        "total": 40
+      },
+      "sentinel2": {
+        "by_month": {
+          "6": 2,
+          "7": 1,
+          "9": 17
+        },
+        "in_season": 20,
+        "total": 20
+      }
+    }
+  },
+  "mean_lst_before_c": 49.89,
+  "mean_lst_after_c": 50.89,
+  "desert_to_builtup_km2": 30.23,
+  "desert_to_builtup_hectares": 3023,
+  "static_uhi_c": 2.35,
+  "conversion_extra_warming_c": -0.028,
+  "conversion_verdict": "SIGNIFICANT",
+  "pre_construction_temperature_gap_c": 2.48,
   "significance_tests": [
     {
       "contrast": "New built-up (was desert) vs Stable desert",
-      "diff_c": -0.01,
-      "t": -1.3,
-      "p": "2.05e-01",
-      "cohens_d": -0.008,
-      "verdict": "not significant"
+      "diff_c": -0.028,
+      "t": -4.0,
+      "p": "6.56e-05",
+      "cohens_d": -0.025,
+      "verdict": "SIGNIFICANT"
     },
     {
       "contrast": "Stable built-up vs Stable desert",
-      "diff_c": 0.338,
-      "t": 62.7,
+      "diff_c": 0.23,
+      "t": 47.0,
       "p": "0.00e+00",
-      "cohens_d": 0.322,
+      "cohens_d": 0.236,
       "verdict": "SIGNIFICANT"
     },
     {
       "contrast": "Stable built-up vs New built-up (was desert)",
-      "diff_c": 0.347,
-      "t": 50.3,
+      "diff_c": 0.259,
+      "t": 39.4,
       "p": "0.00e+00",
-      "cohens_d": 0.356,
+      "cohens_d": 0.279,
       "verdict": "SIGNIFICANT"
     }
   ],
-  "albedo_sensitivity_c_per_unit": -4.56,
+  "albedo_sensitivity_c_per_unit": -5.86,
   "albedo_sensitivity_ci95": [
-    -6.05,
-    -2.94
+    -7.54,
+    -4.35
   ],
-  "cooling_per_0.1_albedo_c": 0.46,
+  "cooling_per_0.1_albedo_c": 0.59,
   "mask_sensitivity_check": {
-    "loose_slope": 11.55,
-    "strict_slope": -4.56,
+    "loose_slope": 20.49,
+    "strict_slope": -5.86,
     "note": "An NDBI>0 mask admits channel water (dark, cold) and bright sabkha (bright, hot), inverting the slope. Requiring agreement with an independent land-cover product recovers the expected negative slope."
   },
   "validation_builtup": {
@@ -71,88 +111,88 @@
     "reference": "ESA WorldCover 2021 v200, class 50",
     "validation": "2 km spatial blocks, 60/40 split, metrics on held-out blocks only",
     "n_test": 95346,
-    "TP": 33703,
-    "FP": 16262,
-    "FN": 5677,
-    "TN": 39704,
-    "accuracy": 0.7699,
-    "precision": 0.6745,
-    "recall": 0.8558,
-    "f1": 0.7544,
-    "iou": 0.6057,
+    "TP": 33643,
+    "FP": 16345,
+    "FN": 5737,
+    "TN": 39621,
+    "accuracy": 0.7684,
+    "precision": 0.673,
+    "recall": 0.8543,
+    "f1": 0.7529,
+    "iou": 0.6037,
     "baseline_ndbi_gt_0": {
-      "TP": 33711,
-      "FP": 45337,
-      "FN": 5669,
-      "TN": 10629,
-      "accuracy": 0.465,
-      "precision": 0.4265,
-      "recall": 0.856,
-      "f1": 0.5693,
-      "iou": 0.3979
+      "TP": 33251,
+      "FP": 45533,
+      "FN": 6129,
+      "TN": 10433,
+      "accuracy": 0.4582,
+      "precision": 0.4221,
+      "recall": 0.8444,
+      "f1": 0.5628,
+      "iou": 0.3916
     },
     "top_features": [
       {
         "feature": "swir",
-        "importance": 0.1317
+        "importance": 0.1331
       },
       {
         "feature": "mndwi",
-        "importance": 0.116
+        "importance": 0.1271
       },
       {
         "feature": "tex_bright_5",
-        "importance": 0.1081
-      },
-      {
-        "feature": "brightness",
-        "importance": 0.0788
+        "importance": 0.1093
       },
       {
         "feature": "tex_swir_5",
-        "importance": 0.0735
-      },
-      {
-        "feature": "nir",
-        "importance": 0.072
+        "importance": 0.0724
       },
       {
         "feature": "tex_swir_9",
-        "importance": 0.0667
+        "importance": 0.0697
+      },
+      {
+        "feature": "brightness",
+        "importance": 0.0691
       },
       {
         "feature": "red",
-        "importance": 0.0641
+        "importance": 0.063
+      },
+      {
+        "feature": "nir",
+        "importance": 0.0627
       }
     ],
     "note": "Index thresholds were tried first and failed: calibrating the NDBI threshold on held-out data left precision at 0.40 at every threshold, because bare sabkha is SWIR-bright exactly like concrete. Texture separates them."
   },
   "validation_model": {
     "label": "STRICT mask \u2014 used for the product",
-    "slope": -4.557,
+    "slope": -5.8579,
     "ci95": [
-      -6.047187423269291,
-      -2.9429368422549396
+      -7.542542125113193,
+      -4.3510001828763745
     ],
-    "intercept": 56.1925,
-    "ndvi_coef": -10.8375,
-    "r2_in": 0.0655,
-    "cv_r2": 0.0565,
-    "cv_rmse": 1.4652,
-    "n": 152487,
-    "n_blocks": 159
+    "intercept": 57.4926,
+    "ndvi_coef": -19.5928,
+    "r2_in": 0.143,
+    "cv_r2": 0.1295,
+    "cv_rmse": 1.7022,
+    "n": 175033,
+    "n_blocks": 188
   },
   "roofs_analysed": 3603,
   "roof_area_total_km2": 4.82,
-  "top100_benefit_share_pct": 20.8,
+  "top100_benefit_share_pct": 20.9,
   "top100_concentration_x": 7.5,
   "physical_impact": {
     "assumed_irradiance_W_m2": 300.0,
-    "avoided_absorption_all_MW": 311.5,
-    "avoided_absorption_top100_MW": 64.8,
+    "avoided_absorption_all_MW": 270.3,
+    "avoided_absorption_top100_MW": 56.5,
     "caveat": "Avoided shortwave absorption, NOT an air-conditioning energy saving."
   },
   "ranking_modes": {
-    "benefit_vs_hottest_top100_overlap": 27
+    "benefit_vs_hottest_top100_overlap": 21
   }
 }

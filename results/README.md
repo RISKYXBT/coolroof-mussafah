@@ -44,6 +44,9 @@ Every number quoted in the root `README.md` §9 comes from `summary.json`, excep
 the roof cross-section in §9.4, which is computed from `roof_priority_ranked.csv`
 (the script is `../docs/make_figs.py`, function `f7_roof_confound`).
 
+`summary.json` carries a `season_filter` block recording the month histogram of
+every composite. All three are 100% May–September.
+
 Note panel 3 of `05_roof_priority.png`: across buildings the albedo–temperature
 relationship is **positive**, the opposite sign to the pixel-level effect the
 product uses. That is deliberate and is addressed in README §9.4 rather than
