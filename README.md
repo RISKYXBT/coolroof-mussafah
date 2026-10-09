@@ -4,6 +4,11 @@
 **Theme:** Urban Expansion, Land Use Change & Heat Risk  ·  **Track:** Hyperspectral Data Track
 **Team:** T0050 · United Arab Emirates
 
+> **⚠ Mid-update — 9 Oct 2026.** `notebooks/02_main_analysis.ipynb` has just gained a
+> May–September season filter on every composite (see §9.7). The contents of `results/`
+> and the figures quoted below are from the **previous, unfiltered** run and will be
+> regenerated. Until that lands, the notebook and the committed results do not match.
+
 > Satellite screening that turns a city heat map into a ranked worklist of individual
 > rooftops — with the cooling-per-retrofit **measured from Abu Dhabi's own data**, and
 > the roof material identified from **NASA EMIT hyperspectral imagery over Mussafah
