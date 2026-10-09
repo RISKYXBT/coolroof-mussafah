@@ -71,8 +71,8 @@ ADM already maintains its own schedule of rates, and so does every contractor wh
 bid the works. The ranking becomes a cost-effectiveness ranking the moment the client's
 own rate card is applied to the `area_m2` column — one multiplication. Publishing an
 invented AED/m² figure would add nothing and would be the first number a procurement
-reviewer challenged. **[TEAM: if a verified Abu Dhabi rate is available before
-submission, add it here as a worked example and cite the source.]**
+reviewer challenged. The ranking is deliberately rate-agnostic, so it works against
+whichever schedule of rates the client already holds.
 
 ---
 
@@ -173,8 +173,14 @@ coefficients:
 α = 0.2266·B2 + 0.1236·B3 + 0.1573·B4 + 0.3417·B8 + 0.1170·B11 + 0.0338·B12
 ```
 
-(weights sum to 1.0). **Source:** Bonafoni & Sekertekin, *Albedo Retrieval From
-Sentinel-2 by New Narrow-to-Broadband Conversion Coefficients*, IEEE GRSL, 2020.
+(weights sum to 1.0, so the conversion carries no additive constant). **Source:**
+Bonafoni, S. & Şekertekin, A. (2020), *Albedo Retrieval From Sentinel-2 by New
+Narrow-to-Broadband Conversion Coefficients*, IEEE Geoscience and Remote Sensing Letters
+**17**(9), 1618–1622, [doi:10.1109/LGRS.2020.2967085](https://doi.org/10.1109/LGRS.2020.2967085).
+
+The six weights were checked against an independent implementation —
+[GRASS GIS `i.albedo`](https://github.com/OSGeo/grass/pull/7935), which cites the same
+paper — and match to four decimal places on every band.
 
 **5 — Calibrating the intervention (the analytical core).** Over pixels that *both* our
 classifier and ESA WorldCover independently call built-up, with water and vegetation
@@ -213,6 +219,27 @@ because carbonate absorption dominates everywhere in a carbonate-sabkha setting.
 benefit = ΔT × roof_area_m²                                   [°C·m²]
 ΔQ      = (0.60 − current_albedo) × S × area                  [W avoided]
 ```
+
+**S, the irradiance constant, is anchored to measured Abu Dhabi data.** Islam et al.
+(2009) report a full year of ground pyranometer records at 24.43 °N, 54.45 °E:
+
+| Quantity, measured | Value |
+|---|---|
+| Highest **monthly** mean global solar radiation | **290 W/m²** |
+| Highest **daily** mean | 369 W/m² |
+| Highest one-minute average | 1,041 W/m² |
+| Yearly mean | 18.48 MJ/m²/day = **214 W/m²** over 24 h |
+
+We use **S = 300 W/m²**, a round working value **3.4% above the measured 290 W/m²
+monthly mean**, and **S_NOON_PEAK = 950 W/m²**, below the measured 1,041 W/m²
+one-minute maximum. The 3.4% is stated rather than buried: at the measured 290 the
+top-100 figure would be **54.6 MW** instead of 56.5 MW.
+
+Two things follow that matter more than the rounding. These are **24-hour** means, not
+daytime means, so ΔQ is avoided absorption averaged over the whole diurnal cycle — the
+conservative reading, not the flattering one. And **ΔQ scales linearly in S**, so any
+reader preferring a different irradiance basis rescales the megawatt figures by one
+multiplication; the notebook prints the 290 W/m² equivalent on every run.
 
 Area enters deliberately: one large warehouse roof is far cheaper to treat per square
 metre than fifty small ones. Three ranking modes are produced (§9.5).
@@ -540,8 +567,12 @@ urban product over Gulf cities, including Satellite 813, will face the same cons
 - **Overpass time.** Landsat crosses at ~10:30 local; peak surface temperature is later,
   so absolute values understate the daily maximum. Relative ranking is unaffected.
 - **Avoided absorption is not avoided energy.** The megawatt figures are reduced
-  shortwave absorption at an assumed S = 300 W/m² summer daytime mean. They are **not**
-  an air-conditioning saving. **[TEAM: verify and cite the irradiance figure.]**
+  shortwave absorption at S = 300 W/m², a round value 3.4% above the 290 W/m² highest
+  monthly mean measured in Abu Dhabi (Islam et al. 2009), averaged over the full
+  24-hour cycle; at the measured 290 the figure is 54.6 MW. They are **not** an
+  air-conditioning energy saving: what a cooler roof does to a building's cooling load
+  depends on roof insulation, HVAC efficiency and occupancy, none of which are in this
+  analysis.
 
 ---
 
@@ -557,14 +588,19 @@ urban product over Gulf cities, including Satellite 813, will face the same cons
 
 **Data attribution.**
 Landsat Collection 2 Level-2 courtesy of the U.S. Geological Survey.
-Contains modified Copernicus Sentinel-2 data (2025–2026).
+Contains modified Copernicus Sentinel-2 data (2022–2026).
 EMIT data courtesy of NASA JPL, distributed by the LP DAAC.
 © ESA WorldCover project 2021, CC BY 4.0.
 Map data © OpenStreetMap contributors, Open Database Licence.
 
 **Methods cited.**
-Bonafoni, S. & Sekertekin, A. (2020). *Albedo Retrieval From Sentinel-2 by New
-Narrow-to-Broadband Conversion Coefficients.* IEEE GRSL.
+Bonafoni, S. & Şekertekin, A. (2020). *Albedo Retrieval From Sentinel-2 by New
+Narrow-to-Broadband Conversion Coefficients.* IEEE Geoscience and Remote Sensing
+Letters, 17(9), 1618–1622. doi:10.1109/LGRS.2020.2967085
+
+Islam, M. D., Kubo, I., Ohadi, M. & Alili, A. A. (2009). *Measurement of solar energy
+radiation in Abu Dhabi, UAE.* Applied Energy, 86(4), 511–515.
+doi:10.1016/j.apenergy.2008.07.012
 Clark, R. N. & Roush, T. L. (1984). *Reflectance spectroscopy: quantitative analysis
 techniques for remote sensing applications.* JGR Solid Earth.
 USGS (2024). *Landsat Collection 2 Level-2 Science Product Guide.*

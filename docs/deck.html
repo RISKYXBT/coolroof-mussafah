@@ -356,8 +356,10 @@
       </div>
       <div class="card">
         <div class="tag">Step 3 — albedo and sensitivity</div>
-        <p>Sentinel-2 narrow-to-broadband albedo (Bonafoni &amp; Sekertekin 2020) from the <strong>same months</strong>, regressed
-        against temperature under <strong>spatial block cross-validation</strong>.</p>
+        <p>Sentinel-2 narrow-to-broadband albedo (Bonafoni &amp; Şekertekin 2020, weights
+        cross-checked against GRASS GIS <span style="font-family:ui-monospace,monospace">i.albedo</span>)
+        from the <strong>same months</strong>, regressed against temperature under
+        <strong>spatial block cross-validation</strong>.</p>
       </div>
       <div class="card">
         <div class="tag">Step 4 — the worklist</div>
@@ -418,7 +420,10 @@
         </div>
         <p style="font-size:10pt;color:var(--mute);line-height:1.5;margin-top:4px;">
           Avoided absorption is <strong>reduced shortwave load, not an air-conditioning
-          saving</strong>, at an assumed summer daytime mean of S = 300 W/m².
+          saving</strong>, at S = 300 W/m² — a round value 3.4% above the <strong>290 W/m²
+          highest monthly mean measured in Abu Dhabi</strong> (Islam et al. 2009, a full
+          year of ground pyranometer records). A 24-hour mean, so this is averaged over
+          the whole diurnal cycle; at the measured 290 it is 54.6 MW.
         </p>
       </div>
     </div>
@@ -653,16 +658,22 @@
         <div class="tag">Data attribution</div>
         <p style="font-size:10pt;line-height:1.6">
         Landsat Collection 2 Level-2 courtesy of the U.S. Geological Survey.<br>
-        Contains modified Copernicus Sentinel-2 data (2025–2026).<br>
+        Contains modified Copernicus Sentinel-2 data (2022–2026).<br>
         EMIT data courtesy of NASA JPL, distributed by the LP DAAC.<br>
         © ESA WorldCover project 2021, CC BY 4.0.<br>
         Map data © OpenStreetMap contributors, Open Database Licence.</p>
       </div>
       <div class="card">
         <div class="tag">Methods cited</div>
-        <p style="font-size:10pt;line-height:1.6">
-        Bonafoni, S. &amp; Sekertekin, A. (2020). <em style="font-style:italic;color:var(--body);font-weight:400">Albedo
-        Retrieval From Sentinel-2 by New Narrow-to-Broadband Conversion Coefficients.</em> IEEE GRSL.<br><br>
+        <p style="font-size:8.8pt;line-height:1.5">
+        Bonafoni, S. &amp; Şekertekin, A. (2020). <em style="font-style:italic;color:var(--body);font-weight:400">Albedo
+        Retrieval From Sentinel-2 by New Narrow-to-Broadband Conversion Coefficients.</em>
+        IEEE Geoscience and Remote Sensing Letters, 17(9), 1618–1622.
+        doi:10.1109/LGRS.2020.2967085<br><br>
+        Islam, M. D., Kubo, I., Ohadi, M. &amp; Alili, A. A. (2009).
+        <em style="font-style:italic;color:var(--body);font-weight:400">Measurement of solar
+        energy radiation in Abu Dhabi, UAE.</em> Applied Energy, 86(4), 511–515.
+        doi:10.1016/j.apenergy.2008.07.012<br><br>
         Clark, R. N. &amp; Roush, T. L. (1984). <em style="font-style:italic;color:var(--body);font-weight:400">Reflectance
         spectroscopy: quantitative analysis techniques for remote sensing applications.</em> JGR Solid Earth.<br><br>
         USGS (2024). <em style="font-style:italic;color:var(--body);font-weight:400">Landsat Collection 2
