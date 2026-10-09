@@ -305,9 +305,9 @@
   <div class="body">
     <table>
       <tr><th>Product</th><th>Provider</th><th>Dates</th><th>Scenes</th><th>Resolution</th><th>Licence</th></tr>
-      <tr><td class="k">Landsat 8/9 C2 L2SP</td><td>USGS / NASA</td><td class="n">2014-05 → 2016-09</td><td class="n">40 · cloud 0.0–0.3%</td><td class="n">30 m</td><td>Public domain</td></tr>
-      <tr><td class="k">Landsat 8/9 C2 L2SP</td><td>USGS / NASA</td><td class="n">2024-05 → 2026-09</td><td class="n">40</td><td class="n">30 m</td><td>Public domain</td></tr>
-      <tr><td class="k">Sentinel-2 L2A</td><td>ESA Copernicus</td><td class="n">2025-05 → 2026-09</td><td class="n">20</td><td class="n">10–20 m</td><td>Free and open</td></tr>
+      <tr><td class="k">Landsat 8/9 C2 L2SP</td><td>USGS / NASA</td><td class="n">2014-05 → 2015-11</td><td class="n">40 · cloud &lt;15% · 88% May–Sept</td><td class="n">30 m</td><td>Public domain</td></tr>
+      <tr><td class="k">Landsat 8/9 C2 L2SP</td><td>USGS / NASA</td><td class="n">2024-10 → 2026-09</td><td class="n">40 · cloud &lt;15% · 72% May–Sept</td><td class="n">30 m</td><td>Public domain</td></tr>
+      <tr><td class="k">Sentinel-2 L2A</td><td>ESA Copernicus</td><td class="n">2025-09 → 2026-09</td><td class="n">20 · cloud &lt;15% · <strong>20% May–Sept</strong></td><td class="n">10–20 m</td><td>Free and open</td></tr>
       <tr class="hl"><td class="k">NASA EMIT L2A reflectance</td><td>NASA JPL / LP DAAC</td><td class="n">2026-05-20, 15:03 local</td><td class="n">1 granule</td><td class="n">60 m · 285 bands</td><td>Open</td></tr>
       <tr><td class="k">ESA WorldCover v200</td><td>ESA</td><td class="n">2021</td><td class="n">tile N24E054</td><td class="n">10 m</td><td>CC BY 4.0</td></tr>
       <tr><td class="k">OpenStreetMap buildings</td><td>OSM contributors</td><td class="n">2026-10-07</td><td class="n">8,503 raw footprints</td><td>vector</td><td>ODbL</td></tr>
@@ -347,7 +347,7 @@
         <div class="tag">Step 1 — surface temperature</div>
         <p>Landsat <span style="font-family:ui-monospace,monospace">lwir11</span>, scaled to
         kelvin, <span style="font-family:ui-monospace,monospace">qa_pixel</span> bit-masked for
-        cloud, shadow, cirrus and fill. Summer composites, two epochs.</p>
+        cloud, shadow, cirrus and fill. Per-pixel median, two epoch windows.</p>
       </div>
       <div class="card">
         <div class="tag">Step 2 — built-up mask</div>
@@ -573,6 +573,8 @@
     </div>
     <ul class="two">
       <li class="bad"><strong>The per-roof ΔT is not validated at roof scale</strong> — see the previous slide. It is a screening estimate, not an engineering prediction.</li>
+      <li class="bad"><strong>Composites are warm-season-weighted, not summer-only</strong> (88% / 72% May–Sept). The later epoch carries more cool-season scenes, so the +0.94 °C warming is <strong>conservative</strong>.</li>
+      <li class="bad"><strong>Albedo and temperature come from different seasons</strong> — only 4 of 20 Sentinel-2 scenes are May–Sept. Restricting both to summer over a wider window is the first fix.</li>
       <li class="bad">Land surface temperature is <strong>not air temperature</strong>. This ranks surfaces; it does not predict heat-stroke risk.</li>
       <li class="bad">The sensitivity is <strong>correlational</strong>. Roof thermal mass, building use and HVAC exhaust are not separated.</li>
       <li class="bad">Validation is against <strong>ESA WorldCover, itself a model</strong>. No field survey was performed.</li>
@@ -583,7 +585,7 @@
       <li class="bad">OSM footprint completeness varies. A deployed version would use <strong>municipal cadastral data</strong>.</li>
     </ul>
   </div>
-  <div class="foot"><span>Full list in README §9.6 — each stated before a reviewer has to find it</span><span>13</span></div>
+  <div class="foot"><span>Full list in README §9.7 — each stated before a reviewer has to find it</span><span>13</span></div>
 </section>
 
 <!-- ============================================================ 14 NEXT -->

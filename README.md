@@ -108,9 +108,9 @@ three for every roof simultaneously, repeatedly, without site access.
 
 | Product | Provider | Level | Dates | Scenes | Resolution | Licence |
 |---|---|---|---|---|---|---|
-| Landsat 8/9 Collection 2 Level-2 | USGS / NASA | L2SP | 2014-05-18 → 2016-09-19 | 40 (cloud 0.0–0.3%) | 30 m | Public domain |
-| Landsat 8/9 Collection 2 Level-2 | USGS / NASA | L2SP | 2024-05 → 2026-09 | 40 | 30 m | Public domain |
-| Sentinel-2 L2A | ESA Copernicus | L2A | 2025-05 → 2026-09 | 20 | 10–20 m | Free and open |
+| Landsat 8/9 Collection 2 Level-2 | USGS / NASA | L2SP | 2014-05-18 → 2015-11-04 | 40, cloud < 15% (88% May–Sept) | 30 m | Public domain |
+| Landsat 8/9 Collection 2 Level-2 | USGS / NASA | L2SP | 2024-10-03 → 2026-09-24 | 40, cloud < 15% (72% May–Sept) | 30 m | Public domain |
+| Sentinel-2 L2A | ESA Copernicus | L2A | 2025-09-24 → 2026-09-27 | 20, cloud < 15% (**20% May–Sept** — see §9.7) | 10–20 m | Free and open |
 | **NASA EMIT L2A surface reflectance** | **NASA JPL / LP DAAC** | **L2A** | **2026-05-20, 15:03 local** | **1 granule** | **60 m, 285 bands** | **Open** |
 | ESA WorldCover v200 | ESA | — | 2021 | tile N24E054 | 10 m | CC BY 4.0 |
 | OpenStreetMap buildings | OSM contributors | — | 2026-10-07 | 8,503 raw | vector | ODbL |
@@ -148,7 +148,7 @@ USGS-produced atmospherically corrected Surface Temperature band (band 10, ASTER
 emissivity). We deliberately do not derive LST from top-of-atmosphere radiance: Level-2
 removes a class of hand-made assumptions and gives a citable processing chain. Scaling
 `K = DN × 0.00341802 + 149.0`; per-pixel cloud, cirrus, shadow and dilated-cloud masking
-from `qa_pixel` before compositing; summer median per epoch.
+from `qa_pixel` before compositing; per-pixel median over each epoch window.
 
 **2 — One sensor for both epochs.** Both the thermal and the optical layers of the
 change analysis come from Landsat. Mixing Landsat 2014 with Sentinel-2 2025 would fold a
@@ -178,7 +178,7 @@ Sentinel-2 by New Narrow-to-Broadband Conversion Coefficients*, IEEE GRSL, 2020.
 
 **5 — Calibrating the intervention (the analytical core).** Over pixels that *both* our
 classifier and ESA WorldCover independently call built-up, with water and vegetation
-excluded, we regress summer LST on albedo controlling for NDVI. The slope is the
+excluded, we regress epoch-B LST on albedo controlling for NDVI. The slope is the
 **locally measured marginal effect of albedo on surface temperature**. Uncertainty comes
 from a **300-sample spatial block bootstrap** — resampling whole 1 km blocks, not
 pixels, because pixel resampling ignores spatial autocorrelation and understates the
@@ -286,7 +286,7 @@ they are openly retrievable with the recorded parameters.
 
 | Quantity | Value |
 |---|---|
-| Mean summer LST, 2014–2016 → 2024–2026 | 49.62 °C → 50.56 °C |
+| Mean composite LST, 2014–2016 → 2024–2026 | 49.62 °C → 50.56 °C |
 | Desert converted to built-up | **30.4 km² (3,045 ha)** |
 | Static surface UHI (built-up vs desert, today) | **+1.33 °C** (t = 78.6, p < 10⁻³⁰⁰) |
 | Existing built fabric warming vs desert | **+0.34 °C/decade** (t = 62.7, d = 0.32) |
@@ -478,6 +478,25 @@ urban product over Gulf cities, including Satellite 813, will face the same cons
 
 ### 9.7 Limitations
 
+- **The composites are warm-season-weighted, not summer-only.** The epoch windows are
+  continuous date ranges and scenes are selected by lowest cloud, not by month, so the
+  Landsat composites are **88% May–Sept for 2014–2016 and 72% for 2024–2026** (the rest
+  April, October, November). The seasonal mix therefore differs between epochs, and the
+  later epoch carries more cool-season imagery — which biases the epoch-to-epoch warming
+  figure (+0.94 °C) **downward**, so that number is conservative rather than inflated.
+  The static UHI and the per-decade trend compare land classes *within* a composite, so
+  the seasonal mix affects both classes alike and largely cancels. Every scene ID is in
+  `data/sample_input/provenance.json`; the month breakdown above is recomputed from it.
+- **Albedo and temperature are measured in different seasons.** Only **4 of the 20
+  Sentinel-2 scenes fall in May–Sept**; the albedo composite is dominated by
+  October–February imagery, because the Gulf's summer dust and haze are flagged by the
+  cloud mask and the lowest-cloud scenes are therefore cool-season. Surface albedo of
+  built materials is fairly stable through the year, but solar zenith angle at 24°N
+  differs sharply between December and June and dust deposition is seasonal, so the
+  albedo values carry an unquantified offset from their summer values. The −4.56
+  sensitivity regresses a warm-season LST composite on a cool-season albedo composite.
+  Restricting both to May–Sept, over a wider multi-year window so enough clean summer
+  scenes are available, is the first thing we would change.
 - **The per-roof ΔT is not validated at roof scale.** See §9.4 — the roof cross-section
   shows the opposite sign, for reasons we can partly but not fully attribute to mixed
   thermal pixels. Treat the ΔT column as a prioritisation score.
