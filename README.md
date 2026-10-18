@@ -580,9 +580,8 @@ urban product over Gulf cities, including Satellite 813, will face the same cons
 
 | Member | Role |
 |---|---|
-| Meera Almansoori | Team lead · surface energy balance physics, methodology, validation design |
-| Ghazi Hafedh | Data pipeline, modelling, software, repository |
-| Ahmed Abu Farha | Municipal building-control domain input, end-user requirements |
+| Meera Almansoori | Team lead · originated the project concept; surface energy balance framing, methodology, validation design |
+| Ghazi Hafedh | Data pipeline, classification, roof ranking, EMIT analysis, repository; municipal end-user requirements |
 
 **Code licence:** MIT (see `LICENSE`).
 
