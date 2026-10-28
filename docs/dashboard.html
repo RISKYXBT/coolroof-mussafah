@@ -11,7 +11,7 @@
   --ground:#0a0f14; --panel:#121a22; --panel-2:#0e151c; --line:#22303f; --line-2:#2e4154;
   --ink:#e6eef5; --ink-2:#93a5b6; --ink-3:#62748a;
   --treat:#2fd6c3; --treat-dim:#17564f;
-  --h1:#a8505c; --h2:#c25a42; --h3:#d86f2d; --h4:#e89022; --h5:#f4b01e; --h6:#ffce5c;
+  --h1:#f5cf4a; --h2:#f3ad32; --h3:#ee8426; --h4:#e55f25; --h5:#d93d28; --h6:#c8202a;
   --sans:"IBM Plex Sans","Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,"SF Mono","Cascadia Mono","JetBrains Mono",Consolas,"Liberation Mono",monospace;
 }
@@ -272,7 +272,7 @@ const D = {"w":7361,"h":5691,"tot":{"n":3603,"cool":5277774.2,"mw":270.3,"mwp":8
 const R = D.r, TOT = D.tot, NR = R.length;
 
 /* ---- heat ramp: Landsat surface temperature -> colour ---- */
-const RAMP = ["#a8505c","#c25a42","#d86f2d","#e89022","#f4b01e","#ffce5c"];
+const RAMP = ["#f5cf4a","#f3ad32","#ee8426","#e55f25","#d93d28","#c8202a"];
 let TMIN = Infinity, TMAX = -Infinity;
 for (const r of R){ if(r.t<TMIN)TMIN=r.t; if(r.t>TMAX)TMAX=r.t; }
 const heat = t => RAMP[Math.max(0,Math.min(5,Math.floor((t-TMIN)/(TMAX-TMIN)*6)))];
