@@ -242,7 +242,7 @@ footer b{color:var(--ink-2);font-weight:500}
       <thead><tr>
         <th><button data-s="rk">Roof<span class="src">OpenStreetMap ID</span></button></th>
         <th><button data-s="a">Area<span class="src">m²</span></button></th>
-        <th><button data-s="al">Albedo now<span class="src">Sentinel-2, 10 m</span></button></th>
+        <th><button data-s="al">Albedo now<span class="src">Sentinel-2, 20 m</span></button></th>
         <th><button data-s="t">Surface temp<span class="src">Landsat, °C</span></button></th>
         <th><button data-s="dt">Est. drop<span class="src">model, °C</span></button></th>
         <th><button data-s="kwp">Peak heat cut<span class="src">kW</span></button></th>
@@ -253,10 +253,12 @@ footer b{color:var(--ink-2);font-weight:500}
 </section>
 
 <footer>
-  <b>Inputs</b> Landsat 8/9 Collection 2 Level-2 surface temperature (30 m) · Sentinel-2 L2A albedo, Bonafoni &amp;
-  Şekertekin narrow-to-broadband (10 m) · NASA EMIT imaging spectrometer, 230 bands (60 m) · OpenStreetMap building
-  footprints. All free and open; no credentials needed. The basemap is not a tile service — it is our own Sentinel-2
-  albedo composite resampled to 20 m, so the roads and plot boundaries you see are measured reflectance.<br>
+  <b>Inputs</b> Landsat 8/9 Collection 2 Level-2 surface temperature, delivered on a 30 m grid — the TIRS thermal
+  sensor acquires at 100 m and USGS resamples it, which is why we treat small roofs as mixed pixels · Sentinel-2 L2A
+  albedo on a 20 m grid, Bonafoni &amp; Şekertekin narrow-to-broadband · NASA EMIT imaging spectrometer, 230 bands
+  (60 m) · OpenStreetMap building footprints, vector. All free and open; no credentials needed. The basemap is not a
+  tile service — it is our own Sentinel-2 albedo composite, so the roads and plot boundaries are measured
+  reflectance.<br>
   <b>Scope</b> The map and the table cover the 500 roofs whose outlines ship with the project — the top 500 of 3,603
   by total cooling benefit. Percentages are always measured against all 3,603 roofs. Under <i>Most total cooling</i>
   the ranking matches the published district-wide ranking exactly; the other two objectives re-rank within these 500.<br>
